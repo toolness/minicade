@@ -1,0 +1,49 @@
+.ff-microgame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ff-invisible-curtain {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.ff-microgame.ff-loading {
+  visibility: hidden;
+}
+
+.ff-time-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  z-index: 1;
+  transition: opacity 0.25s;
+}
+
+.ff-time-bar.ff-ending {
+  opacity: 0;
+}
+
+.ff-time-remaining {
+  height: 100%;
+  width: 100%;
+  background: black;
+}
+
+.ff-microgame > iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}

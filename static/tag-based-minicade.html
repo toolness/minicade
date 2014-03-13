@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/vendor/fancy-friday.css">
+<link rel="stylesheet" href="/vendor/c64-pixelized.css">
+<title>Minicade</title>
+<style>
+html, body {
+  font-family: 'Commodore 64 Pixelized';
+  height: 100%;
+  margin: 0;
+}
+
+.vcenter {
+  /* Internet Explorer 10 */
+  display:-ms-flexbox;
+  -ms-flex-pack:center;
+  -ms-flex-align:center;
+
+  /* Firefox */
+  display:-moz-box;
+  -moz-box-pack:center;
+  -moz-box-align:center;
+
+  /* Safari, Chrome, and Opera */
+  display:-webkit-box;
+  -webkit-box-pack:center;
+  -webkit-box-align:center;
+
+  /* W3C */
+  display:box;
+  box-pack:center;
+  box-align:center;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+ul.menu {
+  font-size: 24px;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  width: 250px;
+}
+
+ul.menu li {
+  width: 100%;
+  margin: 10px 0;
+}
+
+ul.menu li a {
+  display: block;
+  color: black;
+  background: white;
+  text-decoration: none;
+  border: 2px solid black;
+  padding: 2px;
+}
+
+ul.menu li a:hover {
+  background: black;
+  color: white;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+.ff-microgame {
+  background: white;
+}
+
+.featuring a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.featuring a:hover {
+  text-decoration: underline;
+}
+
+.featuring a.remix {
+  text-transform: uppercase;
+}
+
+.featuring a.profile {
+  text-transform: lowercase;
+}
+
+.featuring {
+  font-size: smaller;
+  padding-bottom: 1em;
+}
+
+.featuring ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+</style>
+<div id="main" class="screen vcenter">
+  <div class="container">
+    <h1>Minicade!</h1>
+    <div class="featuring" style="display: none">
+      <h2>Featuring makes tagged with #<span class="tag-name"></span></h2>
+      <ul>
+        <li><a class="remix" href="#"></a> by <a class="profile" href="#"></a></li>
+      </ul>
+    </div>
+    <ul class="menu">
+      <li><a id="start" href="#">Start</a></li>
+      <li><a href="https://github.com/toolness/fancy-friday#readme">Github</a></li>
+    </ul>
+  </div>
+</div>
+<script src="/vendor/jquery-2.0.3.js"></script>
+<script src="/vendor/fancy-friday.js"></script>
+<script>
+var SCORE_MULTIPLIER = {easy: 100, medium: 125, hard: 150};
+var PLAY_TIME = {easy: 5, medium: 4, hard: 3};
+var READ_DELAY = 1500;
+var MAKES_DOMAIN = 'makes.org';
+var MAKE_API_URL = 'https://makeapi.webmaker.org/api/20130724';
+var TAG_NAME = location.pathname.split('/').slice(-1)[0];
+
+var microgames = [];
+var score = 0;
+
+document.title += ' #' + TAG_NAME;
+$('.tag-name').text(TAG_NAME);
+
+function showNewScore(display, newScore, cb) {
+  var h1 = $('<h1></h1>').text(scoreStr(score)).appendTo(display);
+
+  function scoreStr(value) { return 'Score ' + value; }
+
+  function animateScore(value) {
+    h1.delay(10).queue(function(next) {
+      $(this).text(scoreStr(value));
+      next();
+    });
+  }
+
+  while (score < newScore) animateScore(++score);
+  h1.delay(READ_DELAY).queue(function(next) { next(); cb(); });
+}
+
+function playMicrogames(display, difficulty) {
+  microgames.forEach(function(info) {
+    display
+      .screen(info.title).delay(READ_DELAY).queue(function play(next) {
+        var url = info.contenturl || (info.url + '_');
+        var microgame = FancyFriday.Microgame(url, {
+          autoplay: true,
+          difficulty: difficulty,
+          playTime: PLAY_TIME[difficulty]
+        });
+
+        microgame.addEventListener("microgameended", function() {
+          var newScore = score + Math.round(microgame.score *
+                                            SCORE_MULTIPLIER[difficulty]);
+
+          $(microgame).remove();
+          showNewScore(display.empty(), newScore, next);
+        });
+        $("body").append(microgame);
+      });
+  });
+};
+
+function parseAuthor(make) {
+  var author = {
+    profileURL: 'http://' + make.username + '.' + MAKES_DOMAIN,
+    name: make.username
+  };
+
+  make.tags.forEach(function(tag) {
+    match = decodeURIComponent(tag)
+      .match(/^twitter-author:([A-Za-z0-9_\-]+)$/);
+
+    if (match) {
+      author.name = match[1];
+      author.profileURL = 'http://twitter.com/' + author.name;
+    }
+  });
+
+  return author;
+}
+
+$.fn.extend({
+  screen: function(content) {
+    this.queue(function(next) {
+      $(this).empty().append($('<h1></h1>').text(content || ''));
+      next();
+    });
+    return this;
+  }
+});
+
+$.get(MAKE_API_URL + '/make/search?tags=' + TAG_NAME, function(data) {
+  var featuring = $('.featuring');
+  var featuringList = $('ul', featuring);
+  var template = $('li', featuringList).remove();
+
+  data.makes.forEach(function(make) {
+    var item = template.clone().appendTo(featuringList);
+
+    make.author = parseAuthor(make);
+    microgames.push(make);
+    $('.remix', item)
+      .attr('href', make.url + '/edit')
+      .text(make.title);
+    $('.profile', item)
+      .attr('href', make.author.profileURL)
+      .text(make.author.name);
+  });
+
+  featuring.slideDown();
+});
+
+$("#start").click(function() {
+  var display = $("#main .container");
+
+  display.screen("Ready Player One").delay(READ_DELAY);
+  playMicrogames(display, 'easy');
+  display.screen("Getting Harder Now...").delay(READ_DELAY);
+  playMicrogames(display, 'medium');
+  display.screen("Maximum Difficulty!").delay(READ_DELAY);
+  playMicrogames(display, 'hard');
+  display.delay(READ_DELAY).screen("Game Over");
+
+  return false;
+});
+</script>

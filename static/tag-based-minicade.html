@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no">
+<meta name="tag" content="{{tag}}">
 <link rel="stylesheet" href="/vendor/fancy-friday.css">
 <link rel="stylesheet" href="/vendor/c64-pixelized.css">
-<title>Minicade</title>
+<title>Minicade for {{tag}}</title>
 <style>
 html, body {
   font-family: 'Commodore 64 Pixelized';
@@ -106,7 +107,7 @@ h1 {
   <div class="container">
     <h1>Minicade!</h1>
     <div class="featuring" style="display: none">
-      <h2>Featuring makes tagged with #<span class="tag-name"></span></h2>
+      <h2>Featuring makes tagged with #{{tag}}</h2>
       <ul>
         <li><a class="remix" href="#"></a> by <a class="profile" href="#"></a></li>
       </ul>
@@ -125,13 +126,10 @@ var PLAY_TIME = {easy: 5, medium: 4, hard: 3};
 var READ_DELAY = 1500;
 var MAKES_DOMAIN = 'makes.org';
 var MAKE_API_URL = 'https://makeapi.webmaker.org/api/20130724';
-var TAG_NAME = location.pathname.split('/').slice(-1)[0];
+var TAG_NAME = $('meta[name=tag]').attr('content');
 
 var microgames = [];
 var score = 0;
-
-document.title += ' #' + TAG_NAME;
-$('.tag-name').text(TAG_NAME);
 
 function showNewScore(display, newScore, cb) {
   var h1 = $('<h1></h1>').text(scoreStr(score)).appendTo(display);

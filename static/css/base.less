@@ -1,15 +1,86 @@
-@blue: #3FA9F5;
+@import "../vendor/bootstrap/less/variables.less";
 
+@blue: #3FA9F5;
+@lightyellow: #FFFF66;
+@darkyellow: #EBB161;
+@lightorange: #F15A24;
+@darkorange: #CF4D1F;
+
+@import "../vendor/bootstrap/css/bootstrap.css";
 @import "../fonts/OpenSans-Light-webfont.css";
 @import "../fonts/OpenSans-ExtraBold-webfont.css";
 
-html {
+// Mixins
+.ultra-bold() {
+  font-family: 'Open Sans Extrabold';
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+// Rules
+body {
   font-family: 'Open Sans Light', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: @blue;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Open Sans Extrabold';
-  font-weight: normal;
-  text-transform: uppercase;
+  .ultra-bold;
+}
+
+.btn.btn-awsm {
+  .ultra-bold;
+  color: white;
+  border-radius: 0;
+  background-color: @lightorange;
+  border-bottom: 6px solid @darkorange;
+}
+
+.btn.btn-awsm:hover {
+  color: black;
+  background-color: @lightyellow;
+  border-bottom-color: @darkyellow;
+}
+
+section {
+  position: relative;
+  padding: 80px 0;
+}
+
+section.inverted {
+  background: @blue;
+  color: white;
+}
+
+section.yellow {
+  background: @lightyellow;
+  color: black;
+}
+
+.arcade-holder {
+  text-align: right;
+}
+
+@media (max-width: @screen-xs-max) {
+  .arcade-holder, .upside-down-friend-holder {
+    text-align: center;
+  }
+}
+
+.upside-down-friend-holder {
+  position: relative;
+  top: -80px;
+  margin-bottom: -80px;
+}
+
+.mini-game-jam-callout {
+  .ultra-bold;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.mini-game-jam-callout .glyphicon {
+  font-size: 30px;
 }

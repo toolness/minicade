@@ -6,6 +6,8 @@
 @lightorange: #F15A24;
 @darkorange: #CF4D1F;
 
+@sectionpadding: 80px;
+
 @import "../vendor/bootstrap/css/bootstrap.css";
 @import "../fonts/OpenSans-Light-webfont.css";
 @import "../fonts/OpenSans-ExtraBold-webfont.css";
@@ -43,7 +45,7 @@ h1, h2, h3, h4, h5, h6 {
 
 section {
   position: relative;
-  padding: 80px 0;
+  padding: @sectionpadding 0;
 }
 
 section.inverted {
@@ -68,8 +70,8 @@ section.yellow {
 
 .upside-down-friend-holder {
   position: relative;
-  top: -80px;
-  margin-bottom: -80px;
+  top: -@sectionpadding;
+  margin-bottom: -@sectionpadding;
 }
 
 .mini-game-jam-callout {

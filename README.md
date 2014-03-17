@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/toolness/minicade.png)](https://travis-ci.org/toolness/minicade)
+
 Minicade makes it super easy to collaboratively create an arcade of
 mini HTML5-based games with your friends.
 

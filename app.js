@@ -1,5 +1,6 @@
 var express = require('express');
 var tagging = require('./lib/tagging');
+var makeapi = require('./lib/makeapi');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
@@ -24,6 +25,13 @@ var randomTagGenerator = require('./lib/random-tag-generator')({
 app.use(express.static(STATIC_DIR));
 
 app.get('/css/base.css', renderLess('base.less'));
+
+app.get('/new-tag', function(req, res, next) {
+  makeapi.findUniqueTag(randomTagGenerator, function(err, tag) {
+    if (err) return next(err);
+    res.redirect('/t/' + tag);
+  });
+});
 
 app.get('/t/:tag', function(req, res, next) {
   if (!tagging.isValidTag(req.params.tag)) return next();

@@ -3,7 +3,7 @@ var should = require('should');
 
 var makeapi = require('../lib/makeapi');
 
-var fakeMake = {this_is: 'a fake make'};
+var fakeMakes = require('./sample-makes').fancyFridayDemos;
 
 describe('makeapi.doesTagExist()', function() {
   var mockedMake;
@@ -16,7 +16,7 @@ describe('makeapi.doesTagExist()', function() {
   afterEach(function() { mockedMake.done(); });
 
   it('should return true when makes w/ tag exist', function(done) {
-    mockedMake = mockedMake.reply(200, {makes: [fakeMake]});
+    mockedMake = mockedMake.reply(200, {makes: [fakeMakes]});
     makeapi.doesTagExist('exists', function(err, exists) {
       if (err) return done(err);
       exists.should.be.true;
@@ -47,7 +47,7 @@ describe('makeapi.findUniqueTag()', function() {
     var i = 0;
     var mockedMake = nock('https://makeapi.webmaker.org')
       .get('/api/20130724/make/search?tags=lol0&limit=1')
-      .reply(200, {makes: [fakeMake]})
+      .reply(200, {makes: [fakeMakes]})
       .get('/api/20130724/make/search?tags=lol1&limit=1')
       .reply(200, {makes: []});
 

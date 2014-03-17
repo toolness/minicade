@@ -3,6 +3,8 @@ var should = require('should');
 
 var makeapi = require('../lib/makeapi');
 
+var fakeMake = {this_is: 'a fake make'};
+
 describe('makeapi.doesTagExist()', function() {
   var mockedMake;
 
@@ -14,7 +16,7 @@ describe('makeapi.doesTagExist()', function() {
   afterEach(function() { mockedMake.done(); });
 
   it('should return true when makes w/ tag exist', function(done) {
-    mockedMake = mockedMake.reply(200, {makes: [{this_is: 'a fake make'}]});
+    mockedMake = mockedMake.reply(200, {makes: [fakeMake]});
     makeapi.doesTagExist('exists', function(err, exists) {
       if (err) return done(err);
       exists.should.be.true;
@@ -35,6 +37,26 @@ describe('makeapi.doesTagExist()', function() {
     mockedMake = mockedMake.reply(404);
     makeapi.doesTagExist('exists', function(err, exists) {
       err.message.should.eql('got status code 404');
+      done();
+    });
+  });
+});
+
+describe('makeapi.findUniqueTag()', function() {
+  it('should retry until a unique tag is found', function(done) {
+    var i = 0;
+    var mockedMake = nock('https://makeapi.webmaker.org')
+      .get('/api/20130724/make/search?tags=lol0&limit=1')
+      .reply(200, {makes: [fakeMake]})
+      .get('/api/20130724/make/search?tags=lol1&limit=1')
+      .reply(200, {makes: []});
+
+    function candidateGenerator() { return 'lol' + i++; }
+
+    makeapi.findUniqueTag(candidateGenerator, function(err, tag) {
+      if (err) return done(err);
+      tag.should.eql('lol1');
+      mockedMake.done();
       done();
     });
   });

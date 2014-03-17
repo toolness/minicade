@@ -9,6 +9,6 @@ describe('random-tag-generator', function() {
       tagTemplate: '{{words.0}}_{{words.1}}_LOL_{{number}}'
     });
     for (var i = 0; i < 100; i++)
-      gen().should.match(/^\w+_\w+_LOL_\d+$/);
+      gen().should.match(/^\w+_\w+_LOL_\d\d\d$/);
   });
 });

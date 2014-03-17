@@ -14,6 +14,12 @@ var renderLess = require('./lib/render-less')({
   paths: [STATIC_DIR + '/css'],
   debug: DEBUG
 });
+var randomTagGenerator = require('./lib/random-tag-generator')({
+  numWordLists: 2,
+  wordListFormat: STATIC_DIR + '/word-lists/word-%d.txt',
+  tagTemplate: '{{words.0}}-{{words.1}}-minijam-{{number}}',
+  debug: DEBUG
+});
 
 app.use(express.static(STATIC_DIR));
 

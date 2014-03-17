@@ -35,8 +35,14 @@ app.get('/new-tag', function(req, res, next) {
 
 app.get('/t/:tag', function(req, res, next) {
   if (!tagging.isValidTag(req.params.tag)) return next();
-  renderTemplate(res, 'tag-based-minicade.html', {
-    tag: req.params.tag
+  makeapi.getMakesWithTag(req.params.tag, function(err, makes) {
+    if (err) return next(err);
+    renderTemplate(res, 'tag-based-minicade.html', {
+      tag: req.params.tag,
+      makes: makes,
+      makesJSON: JSON.stringify(makes),
+      isPlayable: !!makes.length
+    });
   });
 });
 

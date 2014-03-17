@@ -53,6 +53,11 @@ section.inverted {
   color: white;
 }
 
+section:not(.yellow) a:not(.btn) {
+  color: inherit;
+  text-decoration: underline;
+}
+
 section.yellow {
   background: @lightyellow;
   color: black;
@@ -74,7 +79,7 @@ section.yellow {
   margin-bottom: -@sectionpadding;
 }
 
-.mini-game-jam-callout {
+.next-section-callout {
   .ultra-bold;
   position: absolute;
   bottom: 0;
@@ -83,6 +88,6 @@ section.yellow {
   text-align: center;
 }
 
-.mini-game-jam-callout .glyphicon {
+.next-section-callout .glyphicon {
   font-size: 30px;
 }

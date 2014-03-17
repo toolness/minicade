@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, user-scalable=no">
-<meta name="tag" content="{{tag}}">
+<meta name="makes" content="{{makesJSON}}">
+<link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/vendor/fancy-friday.css">
-<link rel="stylesheet" href="/fonts/c64-pixelized.css">
-<title>Minicade for {{tag}}</title>
 <style>
-html, body {
-  font-family: 'Commodore 64 Pixelized';
+html.playing, html.playing body {
   height: 100%;
   margin: 0;
 }
@@ -34,89 +32,110 @@ html, body {
   box-align:center;
 }
 
-.screen {
+#screen {
   width: 100%;
   height: 100%;
   text-align: center;
 }
 
-ul.menu {
-  font-size: 24px;
-  list-style: none;
-  margin: 0 auto;
-  padding: 0;
-  width: 250px;
+html:not(.playing) #screen {
+  display: none;
 }
 
-ul.menu li {
-  width: 100%;
-  margin: 10px 0;
-}
-
-ul.menu li a {
-  display: block;
-  color: black;
-  background: white;
-  text-decoration: none;
-  border: 2px solid black;
-  padding: 2px;
-}
-
-ul.menu li a:hover {
-  background: black;
-  color: white;
-}
-
-h1 {
-  text-transform: uppercase;
+html.playing #page {
+  display: none;
 }
 
 .ff-microgame {
   background: white;
 }
 
-.featuring a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.featuring a:hover {
-  text-decoration: underline;
-}
-
-.featuring a.remix {
-  text-transform: uppercase;
-}
-
-.featuring a.profile {
+h2.subheading {
+  margin-top: -10px;
   text-transform: lowercase;
 }
 
-.featuring {
-  font-size: smaller;
-  padding-bottom: 1em;
+.tag-name {
+  font-family: monospace;
 }
-
-.featuring ul {
-  list-style-type: none;
-  padding: 0;
-}
-
 </style>
-<div id="main" class="screen vcenter">
+<title>Minicade for #{{tag}}</title>
+<div id="screen" class="vcenter">
+  <div class="screen-container"></div>
+</div>
+<div id="page">
+<section>
   <div class="container">
-    <h1>Minicade!</h1>
-    <div class="featuring" style="display: none">
-      <h2>Featuring makes tagged with #{{tag}}</h2>
-      <ul>
-        <li><a class="remix" href="#"></a> by <a class="profile" href="#"></a></li>
-      </ul>
+    <div class="row">
+      <div class="col-sm-4 arcade-holder">
+        <img src="/images/arcade.png">
+      </div>
+      <div class="col-sm-8">
+        <h1>Minicade</h1>
+        <h2 class="subheading"><span class="tag-name">#{{tag}}</span></h2>
+        {{^isPlayable}}
+        <p>Welcome to your brand-new minicade! You should <a href="#add-a-game">add games</a> to it.</p>
+        <p>Don't like the tag <span class="tag-name">#{{tag}}</span>? You can change it by hacking the URL in your browser's address bar.</p>
+        {{/isPlayable}}
+        {{#isPlayable}}
+        <p>This is an arcade of {{makes.length}} mini games created with <a href="https://thimble.webmaker.org/">Thimble</a> and tagged with <span class="tag-name">#{{tag}}</span>.</p>
+        <button id="play" class="btn btn-awsm">Play</button>
+        <br>
+        <br>
+        <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>
+        {{/isPlayable}}
+      </div>
     </div>
-    <ul class="menu">
-      <li><a id="start" href="#">Start</a></li>
-      <li><a href="https://github.com/toolness/fancy-friday#readme">Github</a></li>
+    <div class="next-section-callout">
+      <div>See the playlist</div>
+      <span class="glyphicon glyphicon-chevron-down"></span>
+    </div>
+  </div>
+</section>
+<section class="inverted">
+  <div class="container">
+    <h1>Playlist</h1>
+    {{#isPlayable}}
+      <p>This minicade contains the following awesome games.</p>
+      {{#makes}}
+        <div class="row">
+          <div class="col-sm-8">
+            <p><strong>{{title}}</strong></p>
+            <p><small>{{description}}</small></p>
+          </div>
+          <div class="col-sm-4 text-right">
+            <a href="{{url}}/edit" class="btn btn-awsm btn-xs">Source</a>
+          </div>
+        </div>
+      {{/makes}}
+    {{/isPlayable}}
+    {{^isPlayable}}
+    <p>No games are in the minicade yet. Add some!</p>
+    {{/isPlayable}}
+    <h1 id="add-a-game">Add A Game</h1>
+    <p>To add a game to this minicade, create a game on <a href="https://thimble.webmaker.org">Thimble</a> and tag it with <span class="tag-name">#{{tag}}</span>. Then reload this page.</p>
+    <p>Here are some sample games to get you started.</p>
+    <ul>
+      <li><a href="https://toolness.makes.org/thimble/poundsplat/edit">Poundsplat</a></li>
+      <li><a href="https://toolness.makes.org/thimble/flyswat/edit">Flyswat</a></li>
+      <li><a href="https://toolness.makes.org/thimble/typetheword/edit">Type-The-Word</a></li>
     </ul>
   </div>
+</section>
+<section class="yellow">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 upside-down-friend-holder">
+        <img src="/images/upside-down-friend.png">
+      </div>
+      <div class="col-sm-8">
+        <h1>Credits</h1>
+        <p>Minicade is made by <a href="http://twitter.com/toolness">@toolness</a> and <a href="http://twitter.com/varelidi">@varelidi</a>.</p>
+        <p>All the games in this minicade are by their respective authors.</p>
+      </div>
+    </div>
+  </div>
+</section>
 </div>
 <script src="/vendor/jquery-2.0.3.js"></script>
 <script src="/vendor/fancy-friday.js"></script>
@@ -124,11 +143,8 @@ h1 {
 var SCORE_MULTIPLIER = {easy: 100, medium: 125, hard: 150};
 var PLAY_TIME = {easy: 5, medium: 4, hard: 3};
 var READ_DELAY = 1500;
-var MAKES_DOMAIN = 'makes.org';
-var MAKE_API_URL = 'https://makeapi.webmaker.org/api/20130724';
-var TAG_NAME = $('meta[name=tag]').attr('content');
+var MAKES = JSON.parse($('meta[name=makes]').attr('content'));
 
-var microgames = [];
 var score = 0;
 
 function showNewScore(display, newScore, cb) {
@@ -148,7 +164,7 @@ function showNewScore(display, newScore, cb) {
 }
 
 function playMicrogames(display, difficulty) {
-  microgames.forEach(function(info) {
+  MAKES.forEach(function(info) {
     display
       .screen(info.title).delay(READ_DELAY).queue(function play(next) {
         var url = info.contenturl || (info.url + '_');
@@ -170,25 +186,6 @@ function playMicrogames(display, difficulty) {
   });
 };
 
-function parseAuthor(make) {
-  var author = {
-    profileURL: 'http://' + make.username + '.' + MAKES_DOMAIN,
-    name: make.username
-  };
-
-  make.tags.forEach(function(tag) {
-    match = decodeURIComponent(tag)
-      .match(/^twitter-author:([A-Za-z0-9_\-]+)$/);
-
-    if (match) {
-      author.name = match[1];
-      author.profileURL = 'http://twitter.com/' + author.name;
-    }
-  });
-
-  return author;
-}
-
 $.fn.extend({
   screen: function(content) {
     this.queue(function(next) {
@@ -199,30 +196,10 @@ $.fn.extend({
   }
 });
 
-$.get(MAKE_API_URL + '/make/search?tags=' + TAG_NAME, function(data) {
-  var featuring = $('.featuring');
-  var featuringList = $('ul', featuring);
-  var template = $('li', featuringList).remove();
+$("#play").click(function() {
+  var display = $("#screen .screen-container");
 
-  data.makes.forEach(function(make) {
-    var item = template.clone().appendTo(featuringList);
-
-    make.author = parseAuthor(make);
-    microgames.push(make);
-    $('.remix', item)
-      .attr('href', make.url + '/edit')
-      .text(make.title);
-    $('.profile', item)
-      .attr('href', make.author.profileURL)
-      .text(make.author.name);
-  });
-
-  featuring.slideDown();
-});
-
-$("#start").click(function() {
-  var display = $("#main .container");
-
+  $('html').addClass('playing');
   display.screen("Ready Player One").delay(READ_DELAY);
   playMicrogames(display, 'easy');
   display.screen("Getting Harder Now...").delay(READ_DELAY);

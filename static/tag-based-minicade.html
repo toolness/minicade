@@ -98,17 +98,22 @@ h2.subheading {
     <h1>Playlist</h1>
     {{#isPlayable}}
       <p>This minicade contains the following awesome games.</p>
+      <div class="row joystick">
+        <img src="/images/joystick.png">
+      </div>
+      <div class="playlist-rows">
       {{#makes}}
         <div class="row">
           <div class="col-sm-8">
-            <p><strong>{{title}}</strong></p>
+            <h6>{{title}}</h6>
             <p><small>{{description}}</small></p>
           </div>
           <div class="col-sm-4 text-right">
-            <a href="{{remixurl}}" class="btn btn-awsm btn-xs">Remix</a>
+            <h6><a href="{{remixurl}}" class="btn btn-awsm btn-xs">Remix</a></h6>
           </div>
         </div>
       {{/makes}}
+      </div>
     {{/isPlayable}}
     {{^isPlayable}}
     <p>No games are in the minicade yet. Add some!</p>

@@ -1,6 +1,8 @@
 @import "../vendor/bootstrap/less/variables.less";
 
 @blue: #3FA9F5;
+@lightblue: #B2DDFB;
+@darkblue: #2F7FB8;
 @lightyellow: #FFFF66;
 @darkyellow: #EBB161;
 @lightorange: #F15A24;
@@ -99,4 +101,26 @@ code {
 
 section.inverted .panel, section.inverted .panel-title {
   color: @blue;
+}
+
+.row.joystick {
+  position: relative;
+  height: 30px;
+  background-color: @darkblue;
+}
+
+.row.joystick img {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+}
+
+.playlist-rows .row {
+  background-color: @lightblue;
+  color: @blue;
+  border-top: 1px solid @blue;
+}
+
+.playlist-rows .row:first-child {
+  border-top: none;
 }

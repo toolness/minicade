@@ -3,7 +3,22 @@ var should = require('should');
 
 var makeapi = require('../lib/makeapi');
 
-var fakeMakes = require('./sample-makes').fancyFridayDemos;
+var sampleMakes = require('./sample-makes');
+
+function fakeMakes() {
+  return JSON.parse(JSON.stringify(sampleMakes.fancyFridayDemos));
+}
+
+describe('makeapi.normalizeMake()', function() {
+  var normalizeMake = makeapi.normalizeMake;
+
+  it('should provide a contenturl prop when not present', function() {
+    var make = fakeMakes()[0];
+    delete make.contenturl;
+    normalizeMake(make).contenturl
+      .should.eql('https://toolness.makes.org/thimble/poundsplat_');
+  });
+});
 
 describe('makeapi.doesTagExist()', function() {
   var mockedMake;
@@ -16,7 +31,7 @@ describe('makeapi.doesTagExist()', function() {
   afterEach(function() { mockedMake.done(); });
 
   it('should return true when makes w/ tag exist', function(done) {
-    mockedMake = mockedMake.reply(200, {makes: [fakeMakes]});
+    mockedMake = mockedMake.reply(200, {makes: [fakeMakes()]});
     makeapi.doesTagExist('exists', function(err, exists) {
       if (err) return done(err);
       exists.should.be.true;
@@ -47,7 +62,7 @@ describe('makeapi.findUniqueTag()', function() {
     var i = 0;
     var mockedMake = nock('https://makeapi.webmaker.org')
       .get('/api/20130724/make/search?tags=lol0&limit=1')
-      .reply(200, {makes: [fakeMakes]})
+      .reply(200, {makes: [fakeMakes()]})
       .get('/api/20130724/make/search?tags=lol1&limit=1')
       .reply(200, {makes: []});
 

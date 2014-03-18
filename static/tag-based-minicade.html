@@ -220,7 +220,7 @@ function playMicrogames(display, difficulty) {
   MAKES.forEach(function(info) {
     display
       .screen(info.title).delay(READ_DELAY).queue(function play(next) {
-        var url = info.contenturl || (info.url + '_');
+        var url = info.contenturl;
         var microgame = FancyFriday.Microgame(url, {
           autoplay: true,
           difficulty: difficulty,

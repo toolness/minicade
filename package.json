@@ -9,6 +9,7 @@
     "cssesc": "0.1.0",
     "request": "2.34.0",
     "underscore": "1.6.0",
+    "highlight.js": "8.0.0",
     "mustache": "0.8.1"
   },
   "devDependencies": {

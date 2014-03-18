@@ -21,6 +21,7 @@ var randomTagGenerator = require('./lib/random-tag-generator')({
   tagTemplate: '{{words.0}}-{{words.1}}-minijam-{{number}}',
   debug: DEBUG
 });
+var renderHighlightedCode = require('./lib/render-highlighted-code');
 
 app.use(express.static(STATIC_DIR));
 
@@ -41,7 +42,9 @@ app.get('/t/:tag', function(req, res, next) {
       tag: req.params.tag,
       makes: makes,
       makesJSON: JSON.stringify(makes),
-      isPlayable: !!makes.length
+      isPlayable: !!makes.length,
+      highlight_js: renderHighlightedCode('js'),
+      highlight_html: renderHighlightedCode('html')
     });
   });
 });

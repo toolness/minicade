@@ -4,6 +4,7 @@
 <meta name="makes" content="{{makesJSON}}">
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/vendor/fancy-friday.css">
+<link rel="stylesheet" href="/vendor/hljs-railscasts.css">
 <style>
 html.playing, html.playing body {
   height: 100%;
@@ -114,12 +115,36 @@ h2.subheading {
     {{/isPlayable}}
     <h1 id="add-a-game">Add A Game</h1>
     <p>To add a game to this minicade, create a game on <a href="https://thimble.webmaker.org">Thimble</a> and tag it with <span class="tag-name">#{{tag}}</span>. Then reload this page.</p>
+    <h2>Sample Games</h2>
     <p>Here are some sample games to get you started.</p>
     <ul>
       <li><a href="https://toolness.makes.org/thimble/poundsplat/remix">Poundsplat</a></li>
       <li><a href="https://toolness.makes.org/thimble/flyswat/remix">Flyswat</a></li>
       <li><a href="https://toolness.makes.org/thimble/typetheword/remix">Type-The-Word</a></li>
     </ul>
+    <h2>JavaScript API</h2>
+    <p>If you make a game from scratch or modify an existing one that isn't built for Minicade, you'll probably want to use the Tinygame library, which makes it easy for Minicade to talk to your game.</p>
+    <p>To use it, add the following script tag to your HTML:</p>
+    {{#highlight_html}}
+    <script src="//minicade.herokuapp.com/tinygame.js"></script>
+    {{/highlight_html}}
+    <p>When you do this, you'll notice a gray bar at the top of your page. This is simulating the Minicade time bar, which shows the player how long they have to complete your game. Tinygame also simulates various events that Minicade will send your game throughout its lifecycle.</p>
+    <p>When Minicade shows your game to the player, <code>Tinygame.onplay</code> is called, so you'll want to start your game logic at that time, like so:</p>
+    {{#highlight_js}}
+    Tinygame.onplay = function() {
+      // Start accepting user input, animating sprites, etc...
+      console.log("Game started!");
+    };
+    {{/highlight_js}}
+    <p>When the player runs out of time, <code>Tinygame.onoutoftime</code> is called, so you'll want to register a callback for that, too:</p>
+    {{#highlight_js}}
+    Tinygame.onoutoftime = function() {
+      // Stop accepting user input, show ending animation, etc...
+      console.log("Player ran out of time!");
+    };
+    {{/highlight_js}}
+    <p>Alternatively, at some point the player might win your game. When this happens, call <code>Tinygame.win()</code> to inform Minicade of their victory, so the player's score can be updated and Minicade can move on to the next game. Or, if the player prematurely falls off a cliff, you can use <code>Tinygame.lose()</code>.</p>
+    <p>Tinygame supports a few more features; these are just the basics. You can learn more in the <a href="https://github.com/toolness/fancy-friday#tinygame-api">Tinygame documentation</a>. And if you don't like Tinygame, you can always communicate with Minicade via DOM primitives using the <a href="https://github.com/toolness/fancy-friday#embedded-microgame-api">Embedded Microgame API</a>.</p>
   </div>
 </section>
 <section class="yellow">

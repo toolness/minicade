@@ -67,58 +67,44 @@ h2.subheading {
 <div id="page">
 <section>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-4 arcade-holder">
-        <img src="/images/arcade.png">
-      </div>
-      <div class="col-sm-8">
-        <h1>Minicade</h1>
-        <h2 class="subheading"><span class="tag-name">#{{tag}}</span></h2>
-        {{^isPlayable}}
-        <p>Welcome to your brand-new minicade! You should <a href="#add-a-game">add games</a> to it.</p>
-        <p>Don't like the tag <span class="tag-name">#{{tag}}</span>? You can change it by hacking the URL in your browser's address bar.</p>
-        {{/isPlayable}}
-        {{#isPlayable}}
-        <p>This is an arcade of {{makes.length}} mini games created with <a href="https://thimble.webmaker.org/">Thimble</a> and tagged with <span class="tag-name">#{{tag}}</span>.</p>
-        <button id="play" class="btn btn-awsm">Play</button>
-        <br>
-        <br>
-        <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>
-        {{/isPlayable}}
-      </div>
+    <h2 class="subheading"><span class="tag-name">#{{tag}}</span></h2>
+    {{#isPlayable}}
+      <p>This is an arcade of {{makes.length}} mini games created with <a href="https://thimble.webmaker.org/">Thimble</a> and tagged with <span class="tag-name">#{{tag}}</span>.</p>
+      <button id="play" class="btn btn-awsm">Play</button>
+      <br>
+      <br>
+      <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>
+    {{/isPlayable}}
+    <div class="row joystick">
+      <img src="/images/joystick.png">
     </div>
-    <div class="next-section-callout">
-      <div>See the playlist</div>
-      <span class="glyphicon glyphicon-chevron-down"></span>
+    <div class="playlist-rows">
+    {{^isPlayable}}
+      <div class="row">
+        <div class="col-sm-12 instructions">
+          <p>There are no games in this minicade yet. To add one, create a game on <a href="https://thimble.webmaker.org">Thimble</a> and tag it with <span class="tag-name">#{{tag}}</span>. Then reload this page.</p>
+          <p>(Don't like the tag <span class="tag-name">#{{tag}}</span>? You can change it by hacking the URL in your browser's address bar.)</p>
+        </div>
+      </div>
+    {{/isPlayable}}
+    {{#isPlayable}}
+    {{#makes}}
+      <div class="row">
+        <div class="col-sm-8">
+          <h6>{{title}}</h6>
+          <p><small>{{description}}</small></p>
+        </div>
+        <div class="col-sm-4 text-right">
+          <h6><a href="{{remixurl}}" class="btn btn-awsm btn-xs">Remix</a></h6>
+        </div>
+      </div>
+    {{/makes}}
+    {{/isPlayable}}
     </div>
   </div>
 </section>
 <section class="inverted">
   <div class="container">
-    <h1>Playlist</h1>
-    {{#isPlayable}}
-      <div class="row joystick">
-        <img src="/images/joystick.png">
-      </div>
-      <div class="playlist-rows">
-      {{#makes}}
-        <div class="row">
-          <div class="col-sm-8">
-            <h6>{{title}}</h6>
-            <p><small>{{description}}</small></p>
-          </div>
-          <div class="col-sm-4 text-right">
-            <h6><a href="{{remixurl}}" class="btn btn-awsm btn-xs">Remix</a></h6>
-          </div>
-        </div>
-      {{/makes}}
-      </div>
-    {{/isPlayable}}
-    {{^isPlayable}}
-    <p>No games are in the minicade yet. Add some!</p>
-    {{/isPlayable}}
-    <h1 id="add-a-game">Add A Game</h1>
-    <p>To add a game to this minicade, create a game on <a href="https://thimble.webmaker.org">Thimble</a> and tag it with <span class="tag-name">#{{tag}}</span>. Then reload this page.</p>
     <h3>Sample Games</h3>
     <p>Here are some sample games to get you started.</p>
     <ul>

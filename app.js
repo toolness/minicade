@@ -18,7 +18,7 @@ var renderLess = require('./lib/render-less')({
 var randomTagGenerator = require('./lib/random-tag-generator')({
   numWordLists: 2,
   wordListFormat: STATIC_DIR + '/word-lists/word-%d.txt',
-  tagTemplate: '{{words.0}}-{{words.1}}-minijam-{{number}}',
+  tagTemplate: '{{words.0}}-{{words.1}}-{{number}}',
   debug: DEBUG
 });
 var renderHighlightedCode = require('./lib/render-highlighted-code');

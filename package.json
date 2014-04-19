@@ -21,6 +21,10 @@
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha -R spec"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "http://github.com/toolness/minicade.git"
+  },
   "author": "",
   "license": "BSD"
 }

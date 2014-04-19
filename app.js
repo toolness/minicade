@@ -7,6 +7,7 @@ var DEBUG = 'DEBUG' in process.env;
 var STATIC_DIR = __dirname + '/static';
 
 var app = express();
+var gistCache = require('./lib/gist-cache')();
 var renderTemplate = require('./lib/render-template')({
   rootDir: STATIC_DIR,
   debug: DEBUG
@@ -26,6 +27,22 @@ var renderHighlightedCode = require('./lib/render-highlighted-code');
 app.use(express.static(STATIC_DIR));
 
 app.get('/css/base.css', renderLess('base.less'));
+
+app.param('gistId', function(req, res, next, param) {
+  if (!/^[0-9]+$/.test(param)) return next(404);
+
+  gistCache.get(param, function(err, gist) {
+    if (err) return next(err);
+    if (!gist) return next(404);
+    req.gist = gist;
+    return next();
+  });
+});
+
+app.get('/gist/:gistId', function(req, res, next) {
+  // TODO: Parse gist YAML and render a minicade page for it, as per #6.
+  return res.send(req.gist);
+});
 
 app.get('/new-tag', function(req, res, next) {
   makeapi.findUniqueTag(randomTagGenerator, function(err, tag) {
@@ -47,6 +64,16 @@ app.get('/t/:tag', function(req, res, next) {
       highlight_html: renderHighlightedCode('html')
     });
   });
+});
+
+app.use(function(err, req, res, next) {
+  if (typeof(err) == 'number')
+    return res.type('text/plain').send(err);
+  if (typeof(err.status) == 'number')
+    return res.type('text/plain').send(err.status, err.message);
+  process.stderr.write(err.stack);
+  res.type('text')
+    .send(500, DEBUG ? err.stack : 'Sorry, something exploded!');
 });
 
 app.listen(PORT, function() {

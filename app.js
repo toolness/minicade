@@ -1,6 +1,7 @@
 var express = require('express');
 var tagging = require('./lib/tagging');
 var makeapi = require('./lib/makeapi');
+var template = require('./lib/template');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
@@ -8,10 +9,6 @@ var STATIC_DIR = __dirname + '/static';
 
 var app = express();
 var gistCache = require('./lib/gist-cache')();
-var renderTemplate = require('./lib/render-template')({
-  rootDir: STATIC_DIR,
-  debug: DEBUG
-});
 var renderLess = require('./lib/render-less')({
   paths: [STATIC_DIR + '/css'],
   debug: DEBUG
@@ -23,6 +20,11 @@ var randomTagGenerator = require('./lib/random-tag-generator')({
   debug: DEBUG
 });
 var renderHighlightedCode = require('./lib/render-highlighted-code');
+
+template.express(app, {
+  rootDir: __dirname + '/template',
+  debug: DEBUG
+});
 
 app.use(express.static(STATIC_DIR));
 
@@ -55,7 +57,7 @@ app.get('/t/:tag', function(req, res, next) {
   if (!tagging.isValidTag(req.params.tag)) return next();
   makeapi.getMakesWithTag(req.params.tag, function(err, makes) {
     if (err) return next(err);
-    renderTemplate(res, 'tag-based-minicade.html', {
+    res.render('tag-based-minicade.html', {
       tag: req.params.tag,
       makes: makes,
       makesJSON: JSON.stringify(makes),

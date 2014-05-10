@@ -63,7 +63,9 @@ app.get('/t/:tag', function(req, res, next) {
       makesJSON: JSON.stringify(makes),
       isPlayable: !!makes.length,
       highlight_js: renderHighlightedCode('js'),
-      highlight_html: renderHighlightedCode('html')
+      highlight_html: renderHighlightedCode('html'),
+      GA_TRACKING_ID: process.env.GA_TRACKING_ID,
+      GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de'
     });
   });
 });

@@ -64,7 +64,11 @@ $("#play").click(function() {
   playMicrogames(display, 'medium');
   display.screen("Maximum Difficulty!").delay(READ_DELAY);
   playMicrogames(display, 'hard');
-  display.delay(READ_DELAY).screen("Game Over");
+  display.delay(READ_DELAY).screen("Game Over")
+    .delay(READ_DELAY * 2).queue(function(next) {
+      window.location.reload();
+      next();
+    });
 
   return false;
 });

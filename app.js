@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var MongoClient = require('mongodb').MongoClient;
 var express = require('express');
 var bodyParser = require('body-parser');
 var tagging = require('./lib/tagging');
@@ -8,8 +9,10 @@ var template = require('./lib/template');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
+var MONGODB_URL = process.env.MONGODB_URL;
 var STATIC_DIR = __dirname + '/static';
 
+var Yamlbin = require('./lib/yamlbin');
 var app = express();
 var gistCache = require('./lib/gist-cache')();
 var renderLess = require('./lib/render-less')({
@@ -23,9 +26,7 @@ var randomTagGenerator = require('./lib/random-tag-generator')({
   debug: DEBUG
 });
 var renderHighlightedCode = require('./lib/render-highlighted-code');
-var yamlbin = require('./lib/yamlbin')({
-  debug: DEBUG
-});
+var yamlbin;
 
 template.express(app, {
   rootDir: __dirname + '/template',
@@ -136,6 +137,24 @@ app.use(function(err, req, res, next) {
     .send(500, DEBUG ? err.stack : 'Sorry, something exploded!');
 });
 
-app.listen(PORT, function() {
-  console.log('Listening on port', PORT);
-});
+if (!module.parent) (function startServer() {
+  var storage;
+
+  function listen() {
+    yamlbin = Yamlbin({storage: storage, debug: DEBUG});
+    app.listen(PORT, function() {
+      console.log('Listening on port', PORT);
+    });
+  }
+
+  if (MONGODB_URL) {
+    MongoClient.connect(MONGODB_URL, function(err, db) {
+      if (err) throw err;
+      storage = Yamlbin.MongoStorage(db);
+      listen();
+    });
+  } else {
+    storage = Yamlbin.MemStorage();
+    listen();
+  }
+})();

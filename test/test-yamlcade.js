@@ -35,4 +35,20 @@ describe('yamlcade', function() {
   it('should report valid YAML', function() {
     yamlcade.isValid(getYaml('list-only.yaml')).should.be.true;
   });
+
+  it('should report invalid URLs', function() {
+    (function() {
+      yamlcade.parse('- url: wat');
+    }).should.throw('invalid format for property: url');
+  });
+
+  it('should set default game title', function() {
+    yamlcade.parse('- url: http://foo.org/')
+      .games[0].title.should.eql('Untitled Game');
+  });
+
+  it('should remove irrelevant properties', function() {
+    ('blah' in yamlcade.parse('- url: http://f.in/\n  blah: hmm').games[0])
+      .should.be.false;
+  });
 });

@@ -43,12 +43,3 @@ html.playing #page {
 .ff-microgame {
   background: white;
 }
-
-h2.subheading {
-  margin-top: -10px;
-  text-transform: lowercase;
-}
-
-.tag-name {
-  font-family: monospace;
-}

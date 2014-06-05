@@ -4,7 +4,8 @@ var should = require('should');
 var FLYSWAT = {
   title: 'Flyswat',
   description: 'Swat the fly before time runs out!',
-  url: 'http://toolness.github.io/fancy-friday/example/game-01.html'
+  url: 'http://toolness.github.io/fancy-friday/example/game-01.html',
+  contenturl: 'http://toolness.github.io/fancy-friday/example/game-01.html'
 };
 
 var yamlcade = require('../lib/yamlcade');
@@ -25,5 +26,13 @@ describe('yamlcade', function() {
     yamlcade.parse(getYaml('list-only.yaml')).should.eql({
       games: [FLYSWAT]
     });
+  });
+
+  it('should report invalid YAML', function() {
+    yamlcade.isValid('wat').should.be.false;
+  });
+
+  it('should report valid YAML', function() {
+    yamlcade.isValid(getYaml('list-only.yaml')).should.be.true;
   });
 });

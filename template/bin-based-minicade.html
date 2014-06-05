@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<meta name="makes" content="{{makesJSON}}">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/minicade.css">
+<link rel="stylesheet" href="/vendor/fancy-friday.css">
+<link rel="stylesheet" href="/vendor/hljs-railscasts.css">
+<title>Minicade: {{bin}}</title>
+<div id="screen" class="vcenter">
+  <div class="screen-container"></div>
+</div>
+<div id="page">
+<section>
+  <div class="container">
+    <h2 class="subheading"><span class="tag-name">{{bin}}</span></h2>
+    {% if isPlayable %}
+      {% if isNew %}
+        <p>Welcome to your new Minicade!</p>
+        <p>We've added a few games to get you started. You can edit the
+          playlist by using the <strong>Edit</strong> button below.</p>
+        <button id="play" class="btn btn-awsm">Play</button>
+        <br>
+        <br>
+        <p><small>(Don't like the name <span class="tag-name">{{bin}}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
+      {% else %}
+        <p>This is an arcade of {{makes.length}} mini games.</p>
+        <button id="play" class="btn btn-awsm">Play</button>
+        <br>
+        <br>
+        <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>
+      {% endif %}
+    {% endif %}
+    <div class="row joystick">
+      <img src="/images/joystick.png">
+    </div>
+    <div class="playlist-rows">
+    {% if not isPlayable %}
+      <div class="row">
+        <div class="col-sm-12 instructions">
+          <p>There are no games in this minicade.</p>
+        </div>
+      </div>
+    {% else %}
+    {% for make in makes %}
+      <div class="row">
+        <div class="col-sm-8">
+          <h6>{{make.title}}</h6>
+          <p><small>{{make.description}}</small></p>
+        </div>
+        {% if make.remixurl %}
+        <div class="col-sm-4 text-right">
+          <h6><a href="{{make.remixurl}}" class="btn btn-awsm btn-xs">Remix</a></h6>
+        </div>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% endif %}
+    </div>
+    <br>
+    <div class="text-right">
+      <a href="/b/{{bin}}/edit" class="btn btn-awsm btn-sm">Edit</a>
+    </div>
+  </div>
+</section>
+<section class="inverted">
+  {% include "developer-docs.html" %}
+</section>
+<section class="yellow">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 upside-down-friend-holder">
+        <img src="/images/upside-down-friend.png">
+      </div>
+      <div class="col-sm-8">
+        <h1>Credits</h1>
+        <p>Minicade is made by <a href="http://twitter.com/toolness">@toolness</a> and <a href="http://twitter.com/varelidi">@varelidi</a>.</p>
+        <p>All the games in this minicade are by their respective authors.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script src="/vendor/jquery-2.0.3.js"></script>
+<script src="/vendor/fancy-friday.js"></script>
+<script src="/js/minicade.js"></script>
+{% include "ga.html" %}

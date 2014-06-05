@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/vendor/hljs-railscasts.css">
+<style>
+.yaml {
+  font-family: monospace;
+}
+</style>
+<title>Edit Minicade: {{bin}}</title>
+<div id="page">
+<section>
+  <div class="container">
+    <h2 class="subheading">Edit <span class="tag-name">{{bin}}</span></h2>
+    {% if hasErrors %}
+      <div class="alert alert-danger">
+        Hmm, either your YAML has errors or we messed up. Sorry we can't be
+        more detailed about what happened right now. See if you can fix the
+        problem and re-submit!
+      </div>
+    {% endif %}
+    <p>Edit the YAML below to change your Minicade.</a>
+    <form method="post">
+      <textarea class="form-control yaml" rows="10" spellcheck="false" name="yaml">{{ yaml }}</textarea>
+      <br>
+      <div class="text-right">
+        <a href="/b/{{bin}}" class="btn btn-awsm">Cancel</a>
+        <button type="submit" class="btn btn-awsm">Submit</button>
+      </div>
+    </form>
+  </div>
+</section>
+<section class="inverted">
+  {% include "developer-docs.html" %}
+</section>
+<section class="yellow">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 upside-down-friend-holder">
+        <img src="/images/upside-down-friend.png">
+      </div>
+      <div class="col-sm-8">
+        <h1>Credits</h1>
+        <p>Minicade is made by <a href="http://twitter.com/toolness">@toolness</a> and <a href="http://twitter.com/varelidi">@varelidi</a>.</p>
+        <p>All the games in this minicade are by their respective authors.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+<script src="/vendor/jquery-2.0.3.js"></script>
+{% include "ga.html" %}

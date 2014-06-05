@@ -1,6 +1,8 @@
 var _ = require('underscore');
 var express = require('express');
+var bodyParser = require('body-parser');
 var tagging = require('./lib/tagging');
+var yamlcade = require('./lib/yamlcade');
 var makeapi = require('./lib/makeapi');
 var template = require('./lib/template');
 
@@ -21,6 +23,9 @@ var randomTagGenerator = require('./lib/random-tag-generator')({
   debug: DEBUG
 });
 var renderHighlightedCode = require('./lib/render-highlighted-code');
+var yamlbin = require('./lib/yamlbin')({
+  debug: DEBUG
+});
 
 template.express(app, {
   rootDir: __dirname + '/template',
@@ -29,12 +34,31 @@ template.express(app, {
 
 _.extend(app.locals, {
   GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-  GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de'
+  GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de',
+  highlight_js: renderHighlightedCode('js'),
+  highlight_html: renderHighlightedCode('html')
 });
 
+// TODO: Add CSRF middleware.
+app.use(bodyParser());
 app.use(express.static(STATIC_DIR));
 
 app.get('/css/base.css', renderLess('base.less'));
+
+app.param('tag', function(req, res, next, param) {
+  if (!tagging.isValidTag(param)) return next('route');
+  next();
+});
+
+app.param('bin', function(req, res, next, param) {
+  if (!tagging.isValidTag(param)) return next('route');
+  yamlbin.get(param, function(err, yaml, minicade) {
+    if (err) return next(err);
+    req.minicade = minicade;
+    req.yaml = yaml;
+    next();
+  });
+});
 
 app.param('gistId', function(req, res, next, param) {
   if (!/^[0-9]+$/.test(param)) return next(404);
@@ -52,6 +76,37 @@ app.get('/gist/:gistId', function(req, res, next) {
   return res.send(req.gist);
 });
 
+app.get('/b/:bin', function(req, res, next) {
+  res.render('bin-based-minicade.html', {
+    bin: req.params.bin,
+    isNew: req.minicade.isNew,
+    makes: req.minicade.games,
+    makesJSON: JSON.stringify(req.minicade.games),
+    isPlayable: !!req.minicade.games.length
+  });
+});
+
+app.get('/b/:bin/edit', function(req, res, next) {
+  res.render('bin-based-minicade-edit.html', {
+    bin: req.params.bin,
+    yaml: req.yaml
+  });
+});
+
+app.post('/b/:bin/edit', function(req, res, next) {
+  var yaml = req.body.yaml;
+  if (!yamlcade.isValid(yaml))
+    return res.render('bin-based-minicade-edit.html', {
+      bin: req.params.bin,
+      yaml: yaml,
+      hasErrors: true
+    });
+  yamlbin.update(req.params.bin, yaml, function(err) {
+    if (err) return next(err);
+    res.redirect('/b/' + req.params.bin);
+  });
+});
+
 app.get('/new-tag', function(req, res, next) {
   makeapi.findUniqueTag(randomTagGenerator, function(err, tag) {
     if (err) return next(err);
@@ -60,16 +115,13 @@ app.get('/new-tag', function(req, res, next) {
 });
 
 app.get('/t/:tag', function(req, res, next) {
-  if (!tagging.isValidTag(req.params.tag)) return next();
   makeapi.getMakesWithTag(req.params.tag, function(err, makes) {
     if (err) return next(err);
     res.render('tag-based-minicade.html', {
       tag: req.params.tag,
       makes: makes,
       makesJSON: JSON.stringify(makes),
-      isPlayable: !!makes.length,
-      highlight_js: renderHighlightedCode('js'),
-      highlight_html: renderHighlightedCode('html')
+      isPlayable: !!makes.length
     });
   });
 });

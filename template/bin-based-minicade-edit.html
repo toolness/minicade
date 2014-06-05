@@ -50,4 +50,22 @@
 </section>
 </div>
 <script src="/vendor/jquery-2.0.3.js"></script>
+<script>
+// We'll use TogetherJS to work around the fact that there's currently
+// no conflict resolution for simultaneous edits (whoever submits the
+// form last "wins").
+
+TogetherJSConfig_siteName = 'Minicade';
+TogetherJSConfig_findRoom = 'edit_{{ bin }}';
+TogetherJSConfig_suppressJoinConfirmation = true;
+TogetherJSConfig_autoStart = true;
+
+try {
+  // This is an undocumented hack, but we basically want to suppress
+  // the intro dialog here, to avoid confusing users who just want to
+  // edit.
+  localStorage['togetherjs.settings.seenIntroDialog'] = 'true';
+} catch (e) {}
+</script>
+<script src="//togetherjs.com/togetherjs-min.js"></script>
 {% include "ga.html" %}

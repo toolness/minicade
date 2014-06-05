@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var express = require('express');
 var tagging = require('./lib/tagging');
 var makeapi = require('./lib/makeapi');
@@ -24,6 +25,11 @@ var renderHighlightedCode = require('./lib/render-highlighted-code');
 template.express(app, {
   rootDir: __dirname + '/template',
   debug: DEBUG
+});
+
+_.extend(app.locals, {
+  GA_TRACKING_ID: process.env.GA_TRACKING_ID,
+  GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de'
 });
 
 app.use(express.static(STATIC_DIR));
@@ -63,9 +69,7 @@ app.get('/t/:tag', function(req, res, next) {
       makesJSON: JSON.stringify(makes),
       isPlayable: !!makes.length,
       highlight_js: renderHighlightedCode('js'),
-      highlight_html: renderHighlightedCode('html'),
-      GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-      GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de'
+      highlight_html: renderHighlightedCode('html')
     });
   });
 });

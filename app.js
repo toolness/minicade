@@ -77,6 +77,13 @@ app.get('/gist/:gistId', function(req, res, next) {
   return res.send(req.gist);
 });
 
+app.get('/new-bin', function(req, res, next) {
+  yamlbin.findUnique(randomTagGenerator, function(err, bin) {
+    if (err) return next(err);
+    res.redirect('/b/' + bin);
+  });
+});
+
 app.get('/b/:bin', function(req, res, next) {
   res.render('bin-based-minicade.html', {
     bin: req.params.bin,

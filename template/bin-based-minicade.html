@@ -13,7 +13,10 @@
 <div id="page">
 <section>
   <div class="container">
-    <h2 class="subheading"><span class="tag-name">{{bin}}</span></h2>
+    <h2 class="subheading">
+      {% if isNew %}New{% endif %}
+      <span class="tag-name">{{bin}}</span>
+    </h2>
     {% if isPlayable %}
       {% if isNew %}
         <p>Welcome to your new Minicade!</p>

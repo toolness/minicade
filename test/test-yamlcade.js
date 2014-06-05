@@ -57,4 +57,9 @@ describe('yamlcade', function() {
     minicade.games[0].contenturl.should.eql('https://a.makes.org/foo_');
     minicade.games[0].remixurl.should.eql('https://a.makes.org/foo/remix');
   });
+
+  it('should handle jsbin.com games specially', function() {
+    var minicade = yamlcade.parse('- url: http://jsbin.com/foo');
+    minicade.games[0].remixurl.should.eql('http://jsbin.com/foo/edit');
+  });
 });

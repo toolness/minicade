@@ -51,4 +51,10 @@ describe('yamlcade', function() {
     ('blah' in yamlcade.parse('- url: http://f.in/\n  blah: hmm').games[0])
       .should.be.false;
   });
+
+  it('should handle *.makes.org games specially', function() {
+    var minicade = yamlcade.parse('- url: https://a.makes.org/foo');
+    minicade.games[0].contenturl.should.eql('https://a.makes.org/foo_');
+    minicade.games[0].remixurl.should.eql('https://a.makes.org/foo/remix');
+  });
 });

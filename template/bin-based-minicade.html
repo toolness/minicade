@@ -22,7 +22,8 @@
         <p>Welcome to your new Minicade!</p>
         <p>We've added a few games to get you started. You can edit the
           playlist by using the <strong>Edit</strong> button below.</p>
-        <button id="play" class="btn btn-awsm">Play</button>
+        <button id="play" class="btn btn-awsm">Play Minicade</button>
+        <a href="/b/{{bin}}/edit" class="btn btn-awsm">Edit Minicade</a>
         <br>
         <br>
         <p><small>(Don't like the name <span class="tag-name">{{bin}}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
@@ -53,16 +54,12 @@
         </div>
         {% if make.remixurl %}
         <div class="col-sm-4 text-right">
-          <h6><a href="{{make.remixurl}}" class="btn btn-awsm btn-xs">Remix</a></h6>
+          <h6><a href="{{make.remixurl}}" class="btn btn-awsm btn-xs">Remix Game</a></h6>
         </div>
         {% endif %}
       </div>
     {% endfor %}
     {% endif %}
-    </div>
-    <br>
-    <div class="text-right">
-      <a href="/b/{{bin}}/edit" class="btn btn-awsm btn-sm">Edit</a>
     </div>
   </div>
 </section>

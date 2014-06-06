@@ -72,6 +72,11 @@ $.fn.extend({
 });
 
 $(function() {
+  $(window).on('keyup', function(e) {
+    if (e.which == 27 && $('html').hasClass('playing'))
+      window.history.back();
+  });
+
   $(window).on('hashchange', function() {
     if (window.location.hash == '#play') {
       startPlaying();

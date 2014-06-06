@@ -3,9 +3,12 @@
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/vendor/hljs-railscasts.css">
+<link rel="stylesheet" href="/vendor/codemirror/codemirror.css">
+<link rel="stylesheet" href="/vendor/codemirror/pastel-on-dark.css">
 <style>
-.yaml {
-  font-family: monospace;
+.CodeMirror {
+  padding: 6px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 </style>
 <title>Edit Minicade: {{bin}}</title>
@@ -22,7 +25,7 @@
     {% endif %}
     <p>Edit the YAML below to change your Minicade.</a>
     <form method="post">
-      <textarea class="form-control yaml" rows="10" spellcheck="false" name="yaml">{{ yaml }}</textarea>
+      <textarea class="form-control" id="yaml" rows="10" spellcheck="false" name="yaml">{{ yaml }}</textarea>
       <br>
       <div class="text-right">
         <a href="/b/{{bin}}" class="btn btn-awsm">Cancel</a>
@@ -49,7 +52,13 @@
   </div>
 </section>
 </div>
+<script src="/vendor/codemirror/codemirror.js"></script>
+<script src="/vendor/codemirror/yaml.js"></script>
 <script>
+CodeMirror.fromTextArea(document.getElementById("yaml"), {
+  theme: 'pastel-on-dark'
+}).focus();
+
 // We'll use TogetherJS to work around the fact that there's currently
 // no conflict resolution for simultaneous edits (whoever submits the
 // form last "wins").

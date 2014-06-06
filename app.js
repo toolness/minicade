@@ -14,7 +14,6 @@ var STATIC_DIR = __dirname + '/static';
 
 var Yamlbin = require('./lib/yamlbin');
 var app = express();
-var gistCache = require('./lib/gist-cache')();
 var renderLess = require('./lib/render-less')({
   paths: [STATIC_DIR + '/css'],
   debug: DEBUG
@@ -59,22 +58,6 @@ app.param('bin', function(req, res, next, param) {
     req.yaml = yaml;
     next();
   });
-});
-
-app.param('gistId', function(req, res, next, param) {
-  if (!/^[0-9]+$/.test(param)) return next(404);
-
-  gistCache.get(param, function(err, gist) {
-    if (err) return next(err);
-    if (!gist) return next(404);
-    req.gist = gist;
-    return next();
-  });
-});
-
-app.get('/gist/:gistId', function(req, res, next) {
-  // TODO: Parse gist YAML and render a minicade page for it, as per #6.
-  return res.send(req.gist);
 });
 
 app.get('/new-bin', function(req, res, next) {

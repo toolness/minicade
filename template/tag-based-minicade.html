@@ -15,7 +15,7 @@
   <div class="container">
     <h2 class="subheading"><span class="tag-name">#{{tag}}</span></h2>
     {% if isPlayable %}
-      <p>This is an arcade of {{makes.length}} mini games created with <a href="https://thimble.webmaker.org/">Thimble</a> and tagged with <span class="tag-name">#{{tag}}</span>.</p>
+      <p>This is an arcade of {{makes.length}} mini game{% if makes.length > 1 %}s{% endif %} created with <a href="https://thimble.webmaker.org/">Thimble</a> and tagged with <span class="tag-name">#{{tag}}</span>.</p>
       <a href="#play" class="btn btn-awsm">Play Minicade</a>
       <br>
       <br>

@@ -23,7 +23,7 @@
         <p>We've added a few games to get you started. You can edit the
           playlist by using the <strong>Edit Minicade</strong> button below.</p>
       {% else %}
-        <p>This is an arcade of {{makes.length}} mini games.</p>
+        <p>This is an arcade of {{makes.length}} mini game{% if makes.length > 1 %}s{% endif %}.</p>
       {% endif %}
 
       <a href="#play" class="btn btn-awsm">Play Minicade</a>

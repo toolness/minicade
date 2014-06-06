@@ -42,19 +42,9 @@ function playMicrogames(display, difficulty) {
         $("body").append(microgame);
       });
   });
-};
+}
 
-$.fn.extend({
-  screen: function(content) {
-    this.queue(function(next) {
-      $(this).empty().append($('<h1></h1>').text(content || ''));
-      next();
-    });
-    return this;
-  }
-});
-
-$("#play").click(function() {
+function startPlaying() {
   var display = $("#screen .screen-container");
 
   $('html').addClass('playing');
@@ -66,9 +56,27 @@ $("#play").click(function() {
   playMicrogames(display, 'hard');
   display.delay(READ_DELAY).screen("Game Over")
     .delay(READ_DELAY * 2).queue(function(next) {
-      window.location.reload();
+      window.location.hash = '';
       next();
     });
+}
 
-  return false;
+$.fn.extend({
+  screen: function(content) {
+    this.queue(function(next) {
+      $(this).empty().append($('<h1></h1>').text(content || ''));
+      next();
+    });
+    return this;
+  }
+});
+
+$(function() {
+  $(window).on('hashchange', function() {
+    if (window.location.hash == '#play') {
+      startPlaying();
+    } else if ($('html').hasClass('playing')) {
+      window.location.reload();
+    }
+  }).trigger('hashchange');
 });

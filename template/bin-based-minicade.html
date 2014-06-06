@@ -22,16 +22,18 @@
         <p>Welcome to your new Minicade!</p>
         <p>We've added a few games to get you started. You can edit the
           playlist by using the <strong>Edit Minicade</strong> button below.</p>
-        <button id="play" class="btn btn-awsm">Play Minicade</button>
-        <a href="/b/{{bin}}/edit" class="btn btn-awsm">Edit Minicade</a>
-        <br>
-        <br>
-        <p><small>(Don't like the name <span class="tag-name">{{bin}}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
       {% else %}
         <p>This is an arcade of {{makes.length}} mini games.</p>
-        <button id="play" class="btn btn-awsm">Play</button>
-        <br>
-        <br>
+      {% endif %}
+
+      <a href="#play" class="btn btn-awsm">Play Minicade</a>
+      <a href="/b/{{bin}}/edit" class="btn btn-awsm">Edit Minicade</a>
+      <br>
+      <br>
+
+      {% if isNew %}
+        <p><small>(Don't like the name <span class="tag-name">{{bin}}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
+      {% else %}
         <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>
       {% endif %}
     {% endif %}

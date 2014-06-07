@@ -51,14 +51,15 @@
     {% for make in makes %}
       <div class="row">
         <div class="col-sm-8">
-          <h6>{{make.title}}</h6>
+          <h6><a href="{{ make.url }}" target="_blank">{{make.title}}</a></h6>
           <p><small>{{make.description}}</small></p>
         </div>
         {% if make.remixurl %}
         <div class="col-sm-4 text-right">
-          <h6><a href="{{make.remixurl}}" target="_blank" class="btn btn-awsm btn-awsmblue btn-xs">Remix
-            {% if make.remixtool %}in {{ make.remixtool }}{% else %}Game{% endif %}
-          </a></h6>
+          <h6>
+            <button data-toggle="modal" data-target="#remix_{{ loop.index }}" class="btn btn-awsm btn-awsmblue btn-xs">Remix
+            {% if make.remixtool %}in {{ make.remixtool }}{% else %}Game{% endif %}</button>
+          </h6>
         </div>
         {% endif %}
       </div>
@@ -84,8 +85,34 @@
     </div>
   </div>
 </section>
+{% for make in makes %}{% if make.remixurl %}
+<div class="modal fade" id="remix_{{ loop.index }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Remix {{ make.title }}</h4>
+      </div>
+      <div class="modal-body">
+        <p>You are about to start remixing <strong>{{ make.title }}</strong> in {{ make.remixtool|default('a different website') }}.</p>
+        <p>When you're done remixing, please take note of the URL of your remix. If it's different from <code>{{ make.url }}</code>, you will need to edit your Minicade to point to your remix.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-awsm" data-dismiss="modal">Nevermind</button>
+        <a href="{{ make.remixurl }}" target="_blank" class="btn btn-awsm" data-confirm-remix>Okay</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}{% endfor %}
 </div>
 <script src="/vendor/jquery-2.0.3.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.js"></script>
 <script src="/vendor/fancy-friday.js"></script>
 <script src="/js/minicade.js"></script>
+<script>
+$('body').on('click', 'a[data-confirm-remix]', function(e) {
+  $(e.target).parents('.modal').modal('hide');
+});
+</script>
 {% include "ga.html" %}

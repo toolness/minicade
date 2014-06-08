@@ -43,7 +43,8 @@ var FancyFriday = (function() {
                  'playTime=' + playTime +
                  '&endingTime=' + endingTime +
                  '&difficulty=' + difficulty +
-                 '&cacheBust=' + Date.now();
+                 '&cacheBust=' + (options.cacheBust || Date.now());
+    iframe.scrolling = "no";
     microgame.classList.add('ff-microgame');
     microgame.classList.add('ff-loading');
     timeBar.classList.add('ff-time-bar');

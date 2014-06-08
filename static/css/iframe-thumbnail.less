@@ -6,7 +6,6 @@
 @iframe_height: @iframe_width / @iframe_aspect;
 
 .iframe-thumbnail-frame {
-  display: none;
   position: relative;
   overflow: hidden;
   border: 1px solid black;
@@ -24,7 +23,6 @@
   @scale_amount: unit(@width / @iframe_width);
 
   .iframe-thumbnail-frame {
-    display: block;
     width: @width;
     height: @height;
   }
@@ -34,6 +32,8 @@
     -webkit-transform: scale(@scale_amount, @scale_amount);
   }
 }
+
+.scaled_iframe_thumbnail(160px);
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: @screen-sm-min) {

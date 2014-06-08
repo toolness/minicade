@@ -1,0 +1,51 @@
+@import "../vendor/bootstrap/less/variables.less";
+
+@iframe_grid_columns: 4;
+@iframe_width: 640px;
+@iframe_aspect: 4/3;
+@iframe_height: @iframe_width / @iframe_aspect;
+
+.iframe-thumbnail-frame {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.iframe-thumbnail-frame .iframe-thumbnail-holder {
+  width: @iframe_width;
+  height: @iframe_height;
+  transform-origin: top left;
+  -webkit-transform-origin: top left;
+}
+
+.scaled_iframe_thumbnail(@width) {
+  @height: @width * @iframe_height / @iframe_width;
+  @scale_amount: unit(@width / @iframe_width);
+
+  .iframe-thumbnail-frame {
+    display: block;
+    width: @width;
+    height: @height;
+  }
+
+  .iframe-thumbnail-frame .iframe-thumbnail-holder {
+    transform: scale(@scale_amount, @scale_amount);
+    -webkit-transform: scale(@scale_amount, @scale_amount);
+  }
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: @screen-sm-min) {
+  .scaled_iframe_thumbnail(60px * @iframe_grid_columns);
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: @screen-md-min) {
+  .scaled_iframe_thumbnail(78px * @iframe_grid_columns);
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: @screen-lg-min) {
+  .scaled_iframe_thumbnail(95px * @iframe_grid_columns);
+}

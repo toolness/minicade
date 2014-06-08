@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/vendor/fancy-friday.css">
+<link rel="stylesheet" href="/css/base.css">
+<style>
+html body {
+  background: white;
+}
+</style>
+<title>Minigame Example Gallery</title>
+<section>
+  <div class="container">
+    <h1>Minigame Example Gallery</h1>
+    <p>Here are some example minigames.</p>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="iframe-thumbnail-frame">
+          <div class="iframe-thumbnail-holder" data-loop-microgame="http://jsbin.com/laduqike/3"></div>
+        </div>
+        <h3>Flyswat</h3>
+        <p>By <a href="http://twitter.com/varelidi">@varelidi</a> and <a href="http://twitter.com/toolness">@toolness</a></p>
+      </div>
+      <div class="col-sm-4">
+        <div class="iframe-thumbnail-frame">
+          <div class="iframe-thumbnail-holder" data-loop-microgame="https://mmmo.makes.org/thimble/MTEwMzg4ODM4NA==/text-colour_"></div>
+        </div>
+        <h3>Text Colour</h3>
+        <p>By <a href="https://twitter.com/ohmmmavis">@ohmmmavis</a></p>
+      </div>
+      <div class="col-sm-4">
+        <div class="iframe-thumbnail-frame">
+          <div class="iframe-thumbnail-holder" data-loop-microgame="https://stenington.makes.org/thimble/LTE1OTU2NzA1Mjg=/poundsplat_"></div>
+        </div>
+        <h3>Poundsplat</h3>
+        <p>By <a href="http://twitter.com/stenington">@stenington</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="/vendor/jquery-2.0.3.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="/vendor/fancy-friday.js"></script>
+<script>
+$(function() {
+  var PLAY_TIME = 5;
+  var DELAY_BEFORE_RESTART_MS = 10000;
+  var cacheBust = Date.now();
+
+  function loopMicrogame(el, url) {
+    var microgame = FancyFriday.Microgame(url, {
+      autoplay: true,
+      difficulty: 'medium',
+      playTime: PLAY_TIME,
+      cacheBust: cacheBust
+    });
+    var restartTimeout = null;
+    var restart = function() {
+      if (restartTimeout !== null) clearTimeout(restartTimeout);
+      restartTimeout = null;
+      el.removeEventListener('click', restart, false);
+      el.removeChild(microgame);
+      loopMicrogame(el, url);
+    };
+
+    microgame.addEventListener("microgameended", function() {
+      restartTimeout = setTimeout(restart, DELAY_BEFORE_RESTART_MS);
+      el.addEventListener('click', restart, false);
+    });
+    el.appendChild(microgame);
+  }
+
+  $('[data-loop-microgame]').each(function() {
+    loopMicrogame(this, $(this).attr('data-loop-microgame'));
+  });
+});
+</script>

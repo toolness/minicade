@@ -1,5 +1,22 @@
   <div class="container">
-    {% include "sample-games.html" %}
+    <h3>Sample Games</h3>
+
+    <p>Here are some sample games to get you started.</p>
+
+    <ul>
+    {% for game in sampleGames %}
+      <li><a href="{{ game.remixurl }}">{{ game.title }}</a> by 
+        {% for author in game.authors %}
+          {% if not loop.first %}and{% endif %}
+          <a href="http://twitter.com/{{ author }}">@{{ author }}</a>
+        {% endfor %}
+        <p>{{ game.devnotes|safe }}</p>
+      </li>
+    {% endfor %}
+    </ul>
+
+    <p>We're always looking for new games to add to this list. If you make one, just tweet a link to <a href="http://twitter.com/toolness">@toolness</a> and he'll add it. Alternatively, you can <a href="https://github.com/toolness/minicade/edit/master/static/sample-games.yaml">edit this file</a> and submit a pull request.</p>
+
     <div class="row">
       <div class="col-sm-8">
         <h3>JavaScript API</h3>

@@ -24,6 +24,9 @@ var randomTagGenerator = require('./lib/random-tag-generator')({
   tagTemplate: '{{words[0]}}-{{words[1]}}-{{number}}',
   debug: DEBUG
 });
+var sampleGames = require('./lib/sample-games')({
+  debug: DEBUG
+});
 var renderHighlightedCode = require('./lib/render-highlighted-code');
 var yamlbin;
 
@@ -37,6 +40,11 @@ _.extend(app.locals, {
   GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de',
   highlight_js: renderHighlightedCode('js'),
   highlight_html: renderHighlightedCode('html')
+});
+
+Object.defineProperty(app.locals, 'sampleGames', {
+  get: sampleGames.get,
+  enumerable: true
 });
 
 // TODO: Add CSRF middleware.

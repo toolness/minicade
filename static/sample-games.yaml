@@ -1,0 +1,24 @@
+# Most of these fields should be self-explanatory.
+#
+# `authors` is a space-separated list of Twitter usernames.
+# `devnotes` can include HTML.
+
+- title: Flyswat
+  authors: toolness varelidi
+  devnotes: Animated entirely with CSS. 40 lines of JavaScript.
+  url: http://jsbin.com/laduqike/3
+
+- title: Poundsplat
+  authors: stenington
+  devnotes: Uses the <a href="http://coquette.maryrosecook.com/">Coquette</a> library. 200 lines of hackable, documented JavaScript.
+  url: https://stenington.makes.org/thimble/LTE1OTU2NzA1Mjg=/poundsplat
+
+- title: Type The Word
+  authors: epchristensen
+  devnotes: About 50 lines of JavaScript.
+  url: https://toolness.makes.org/thimble/type-the-word
+
+- title: Text Colour
+  authors: ohmmmavis
+  devnotes: About 60 lines of JavaScript.
+  url: https://mmmo.makes.org/thimble/MTEwMzg4ODM4NA==/text-colour

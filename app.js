@@ -68,6 +68,10 @@ app.param('bin', function(req, res, next, param) {
   });
 });
 
+app.get('/', function(req, res) {
+  res.render('index.html');
+});
+
 app.get('/new-bin', function(req, res, next) {
   yamlbin.findUnique(randomTagGenerator, function(err, bin) {
     if (err) return next(err);

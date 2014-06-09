@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/vendor/fancy-friday.css">
+<link rel="stylesheet" href="/css/base.css">
+<style>
+.iframe-thumbnail-frame {
+  background: white;
+}
+
+#minigame-carousel {
+  padding: 20px 0;
+}
+
+#minigame-carousel .carousel-control {
+  background-image: none;
+}
+
+@media (max-width: 340px) {
+  #minigame-carousel .carousel-inner .col-sm-4.col-sm-offset-2 {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #minigame-carousel .iframe-thumbnail-frame {
+    display: inline-block;
+  }
+
+  #minigame-carousel .carousel-inner {
+    text-align: center;
+  }
+
+  #minigame-carousel .carousel-inner .col-sm-4 {
+    margin-left: 90px;
+    margin-right: 90px;
+  }
+}
+</style>
+<title>Minicade</title>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 arcade-holder">
+        <img src="/images/arcade.png">
+      </div>
+      <div class="col-sm-8">
+        <h1>Minicade</h1>
+        <p>Minicade makes it super easy to collaboratively create an arcade of mini games with your friends. Each person can add a link to one or more mini games to the Minicade and instantly play them as one massive game. The framework even allows games to have levels so they can increase in difficulty the more you play.</p>
+        <a href="/new-bin" class="btn btn-awsm">Get Started</a>
+      </div>
+    </div>
+  </div>
+  <div class="next-section-callout">
+    <div>Wait, what's a mini game?</div>
+    <span class="glyphicon glyphicon-chevron-down"></span>
+  </div>
+</section>
+<section class="inverted">
+  <div class="container">
+    <h1>What's a Mini Game?</h1>
+    <p>Mini games are extremely small web games that only take a few seconds to win. Here are some examples.</p>
+
+    <div id="minigame-carousel" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        {% for game in sampleGames %}
+        <div class="item {% if loop.first %}active{% endif %} row">
+          <div class="col-sm-4 col-sm-offset-2">
+            <div class="iframe-thumbnail-frame">
+              <div class="iframe-thumbnail-holder" data-loop-microgame="{{ game.contenturl }}"></div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <h3>{{ game.title }}</h3>
+            <p>By 
+              {% for author in game.authors %}
+                {% if not loop.first %}and{% endif %}
+                <a href="http://twitter.com/{{ author }}">@{{ author }}</a>
+              {% endfor %}
+            </p>
+            <p><small>{{ game.devnotes|safe }}</small></p>
+            <a href="{{ game.remixurl }}" target="_blank" class="btn btn-awsm btn-xs">Remix in {{ game.remixtool }}</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <a class="left carousel-control" href="#minigame-carousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+      <a class="right carousel-control" href="#minigame-carousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+    </div>
+
+    <p>Because mini games are so small, they're easy to understand and modify. Hooray!</p>
+
+    <h1>Mini Game Jam</h1>
+    <p>Don't know where to start when you are making your mini games? Invite your friends over for a Mini Game Jam. Make sure everyone has a laptop (and some pizza) and that people are split in teams of two to four people. Then give them a ridiculous theme, like dancing bananas or unicorn misfits. Ask your friends to spend 40-60 minutes making a mini game; that is a game that has a very simple and often ridiculous mechanic&mdash;think <em>Wario</em> or <em>Dumb Ways To Die</em>. Once you are done, make sure everyone shares what they made. Use another 30 minutes to fine-tune your game mechanics and art. Once everyone feels happy with their game, combine everything in your minicade.</p>
+    <a href="/new-bin" class="btn btn-awsm">Do It</a>
+  </div>
+</section>
+<section class="yellow">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 upside-down-friend-holder">
+        <img src="/images/upside-down-friend.png">
+      </div>
+      <div class="col-sm-8">
+        <h1>Credits</h1>
+        <p>Minicade is made by <a href="http://twitter.com/toolness">@toolness</a> and <a href="http://twitter.com/varelidi">@varelidi</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="/vendor/jquery-2.0.3.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="/vendor/fancy-friday.js"></script>
+<script>
+$(function() {
+  var PLAY_TIME = 5;
+  var DELAY_BEFORE_RESTART_MS = 10000;
+  var cacheBust = Date.now();
+
+  function loopMicrogame(el, url) {
+    var microgame = FancyFriday.Microgame(url, {
+      autoplay: true,
+      difficulty: 'medium',
+      playTime: PLAY_TIME,
+      cacheBust: cacheBust
+    });
+    var restartTimeout = null;
+    var restart = function() {
+      if (restartTimeout !== null) clearTimeout(restartTimeout);
+      restartTimeout = null;
+      el.removeEventListener('click', restart, false);
+      el.removeChild(microgame);
+      loopMicrogame(el, url);
+    };
+
+    microgame.addEventListener("microgameended", function() {
+      restartTimeout = setTimeout(restart, DELAY_BEFORE_RESTART_MS);
+      el.addEventListener('click', restart, false);
+    });
+    el.appendChild(microgame);
+  }
+
+  $('[data-loop-microgame]').each(function() {
+    loopMicrogame(this, $(this).attr('data-loop-microgame'));
+  });
+});
+</script>

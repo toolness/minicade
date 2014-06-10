@@ -69,7 +69,7 @@ app.get('/', function(req, res) {
 
 app.get('/games', function(req, res) {
   res.render('games.html', {
-    sampleGames: sampleGames.get()
+    rows: sampleGames.paginate(3)
   });
 });
 

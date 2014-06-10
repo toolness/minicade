@@ -9,19 +9,66 @@
 
     <p>Here are some sample games to get you started.</p>
 
-    <ul>
-    {% for game in sampleGames %}
-      <li><a href="{{ game.remixurl }}">{{ game.title }}</a> by 
-        {% for author in game.authors %}
-          {% if not loop.first %}and{% endif %}
-          <a href="http://twitter.com/{{ author }}">@{{ author }}</a>
-        {% endfor %}
-        <p>{{ game.devnotes|safe }}</p>
-      </li>
+    {% for row in rows %}
+    <div class="row">
+      {% for game in row %}
+      <div class="col-sm-4">
+        <div class="iframe-thumbnail-frame">
+          <div class="iframe-thumbnail-holder" data-loop-microgame="{{ game.contenturl }}"></div>
+        </div>
+        <h3>{{ game.title }}</h3>
+        <p>By 
+          {% for author in game.authors %}
+            {% if not loop.first %}and{% endif %}
+            <a href="http://twitter.com/{{ author }}">@{{ author }}</a>
+          {% endfor %}
+        </p>
+        <p><small>{{ game.devnotes|safe }}</small></p>
+        <a href="{{ game.remixurl }}" target="_blank" class="btn btn-awsm btn-xs">Remix in {{ game.remixtool }}</a>
+      </div>
+      {% endfor %}
+    </div>
+    <br>
     {% endfor %}
-    </ul>
 
     <p>We're always looking for new games to add to this list. If you make one, just tweet a link to <a href="http://twitter.com/toolness">@toolness</a> and he'll add it. Alternatively, you can <a href="https://github.com/toolness/minicade/edit/master/static/sample-games.yaml">edit this file</a> and submit a pull request.</p>
   </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(function() {
+  var PLAY_TIME = 5;
+  var DELAY_BEFORE_RESTART_MS = 10000;
+  var cacheBust = Date.now();
+
+  function loopMicrogame(el, url) {
+    var microgame = FancyFriday.Microgame(url, {
+      autoplay: true,
+      difficulty: 'medium',
+      playTime: PLAY_TIME,
+      cacheBust: cacheBust
+    });
+    var restartTimeout = null;
+    var restart = function() {
+      if (restartTimeout !== null) clearTimeout(restartTimeout);
+      restartTimeout = null;
+      el.removeEventListener('click', restart, false);
+      el.removeChild(microgame);
+      loopMicrogame(el, url);
+    };
+
+    microgame.addEventListener("microgameended", function() {
+      restartTimeout = setTimeout(restart, DELAY_BEFORE_RESTART_MS);
+      el.addEventListener('click', restart, false);
+    });
+    el.appendChild(microgame);
+  }
+
+  $('[data-loop-microgame]').each(function() {
+    loopMicrogame(this, $(this).attr('data-loop-microgame'));
+  });
+});
+</script>
 {% endblock %}

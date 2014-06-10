@@ -1,12 +1,14 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no">
+{% extends "base.html" %}
+
+{% block head %}
 <meta name="makes" content="{{makesJSON}}">
-<link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/minicade.css">
-<link rel="stylesheet" href="/vendor/fancy-friday.css">
 <link rel="stylesheet" href="/vendor/hljs-railscasts.css">
-<title>Minicade for #{{tag}}</title>
+{% endblock %}
+
+{% block title %}Minicade for #{{tag}}{% endblock %}
+
+{% block body %}
 <div id="screen" class="vcenter">
   <div class="screen-container"></div>
 </div>
@@ -51,22 +53,13 @@
 <section class="inverted">
   {% include "developer-docs.html" %}
 </section>
-<section class="yellow">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-4 upside-down-friend-holder">
-        <img src="/images/upside-down-friend.png">
-      </div>
-      <div class="col-sm-8">
-        <h1>Credits</h1>
-        <p>Minicade is made by <a href="http://twitter.com/toolness">@toolness</a> and <a href="http://twitter.com/varelidi">@varelidi</a>.</p>
-        <p>All the games in this minicade are by their respective authors.</p>
-      </div>
-    </div>
-  </div>
-</section>
 </div>
-<script src="/vendor/jquery-2.0.3.js"></script>
-<script src="/vendor/fancy-friday.js"></script>
+{% endblock %}
+
+{% block credits %}
+<p>All the games in this minicade are by their respective authors.</p>
+{% endblock %}
+
+{% block scripts %}
 <script src="/js/minicade.js"></script>
-{% include "ga.html" %}
+{% endblock %}

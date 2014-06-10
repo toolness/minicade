@@ -1,7 +1,6 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, user-scalable=no">
-<link rel="stylesheet" href="/css/base.css">
+{% extends "base.html" %}
+
+{% block head %}
 <link rel="stylesheet" href="/vendor/hljs-railscasts.css">
 <link rel="stylesheet" href="/vendor/codemirror/codemirror.css">
 <link rel="stylesheet" href="/vendor/codemirror/pastel-on-dark.css">
@@ -11,7 +10,11 @@
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 </style>
-<title>Edit Minicade: {{bin}}</title>
+{% endblock %}
+
+{% block title %}Edit Minicade: {{bin}}{% endblock %}
+
+{% block body %}
 <section>
   <div class="container">
     <h2 class="subheading">Edit <span class="tag-name">{{bin}}</span></h2>
@@ -36,20 +39,9 @@
 <section class="inverted">
   {% include "developer-docs.html" %}
 </section>
-<section class="yellow">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-4 upside-down-friend-holder">
-        <img src="/images/upside-down-friend.png">
-      </div>
-      <div class="col-sm-8">
-        <h1>Credits</h1>
-        <p>Minicade is made by <a href="http://twitter.com/toolness">@toolness</a> and <a href="http://twitter.com/varelidi">@varelidi</a>.</p>
-        <p>All the games in this minicade are by their respective authors.</p>
-      </div>
-    </div>
-  </div>
-</section>
+{% endblock %}
+
+{% block scripts %}
 <script src="/vendor/codemirror/codemirror.js"></script>
 <script src="/vendor/codemirror/yaml.js"></script>
 <script>
@@ -75,4 +67,4 @@ try {
 } catch (e) {}
 </script>
 <script src="//togetherjs.com/togetherjs-min.js"></script>
-{% include "ga.html" %}
+{% endblock %}

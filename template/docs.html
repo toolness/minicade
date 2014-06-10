@@ -1,25 +1,17 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="/vendor/hljs-railscasts.css">
+{% endblock %}
+
+{% block title %}Minicade: Docs{% endblock %}
+
+{% block body %}
+<section>
   <div class="container">
-    <h3>Sample Games</h3>
-
-    <p>Here are some sample games to get you started.</p>
-
-    <ul>
-    {% for game in sampleGames %}
-      <li><a href="{{ game.remixurl }}">{{ game.title }}</a> by 
-        {% for author in game.authors %}
-          {% if not loop.first %}and{% endif %}
-          <a href="http://twitter.com/{{ author }}">@{{ author }}</a>
-        {% endfor %}
-        <p>{{ game.devnotes|safe }}</p>
-      </li>
-    {% endfor %}
-    </ul>
-
-    <p>We're always looking for new games to add to this list. If you make one, just tweet a link to <a href="http://twitter.com/toolness">@toolness</a> and he'll add it. Alternatively, you can <a href="https://github.com/toolness/minicade/edit/master/static/sample-games.yaml">edit this file</a> and submit a pull request.</p>
-
     <div class="row">
       <div class="col-sm-8">
-        <h3>JavaScript API</h3>
+        <h1>JavaScript API</h1>
         <p>If you make a game from scratch or modify an existing one that isn't built for Minicade, you'll probably want to use the Tinygame library, which makes it easy for Minicade to talk to your game.</p>
         <p>To use it, add the following script tag to your HTML:</p>
         {% highlight 'html' %}
@@ -44,7 +36,7 @@
         <p>Tinygame supports a few more features; these are just the basics. You can learn more in the <a href="https://github.com/toolness/fancy-friday#tinygame-api">Tinygame documentation</a>.</p>
       </div>
       <div class="col-sm-4">
-        <div class="panel panel-default">
+        <div class="panel panel-minicade">
           <div class="panel-heading">
             <h3 class="panel-title">Can I use my favorite HTML5 gaming library?</h3>
           </div>
@@ -63,4 +55,5 @@
       </div>
     </div>
   </div>
-  
+</section>
+{% endblock %}

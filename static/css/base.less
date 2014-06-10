@@ -29,7 +29,12 @@ body {
   background: @lightyellow;
 }
 
+pre {
+  border: none;
+}
+
 .navbar-minicade {
+  border-radius: 0;
   background: @blue;
   color: white;
   margin-bottom: 0;
@@ -130,8 +135,16 @@ code {
   color: inherit;
 }
 
-section.inverted .panel, section.inverted .panel-title {
-  color: @blue;
+.panel-minicade {
+  border-radius: 0;
+  border-color: @blue;
+}
+
+.panel-minicade > .panel-heading {
+  border-radius: 0;
+  color: white;
+  background-color: @blue;
+  border-color: @blue;
 }
 
 .row.joystick {

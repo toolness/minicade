@@ -3,7 +3,6 @@
 {% block head %}
 <meta name="makes" content="{{makesJSON}}">
 <link rel="stylesheet" href="/css/minicade.css">
-<link rel="stylesheet" href="/vendor/hljs-railscasts.css">
 {% endblock %}
 
 {% block title %}Minicade for #{{tag}}{% endblock %}
@@ -49,9 +48,6 @@
     {% endif %}
     </div>
   </div>
-</section>
-<section class="inverted">
-  {% include "developer-docs.html" %}
 </section>
 </div>
 {% endblock %}

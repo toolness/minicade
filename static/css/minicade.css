@@ -36,7 +36,9 @@ html:not(.playing) #screen {
   display: none;
 }
 
-html.playing #page {
+html.playing #page,
+html.playing nav.navbar,
+html.playing footer {
   display: none;
 }
 

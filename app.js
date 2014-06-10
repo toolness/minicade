@@ -37,14 +37,7 @@ template.express(app, {
 
 _.extend(app.locals, {
   GA_TRACKING_ID: process.env.GA_TRACKING_ID,
-  GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de',
-  highlight_js: renderHighlightedCode('js'),
-  highlight_html: renderHighlightedCode('html')
-});
-
-Object.defineProperty(app.locals, 'sampleGames', {
-  get: sampleGames.get,
-  enumerable: true
+  GA_HOSTNAME: process.env.GA_HOSTNAME || 'minica.de'
 });
 
 // TODO: Add CSRF middleware.
@@ -69,7 +62,22 @@ app.param('bin', function(req, res, next, param) {
 });
 
 app.get('/', function(req, res) {
-  res.render('index.html');
+  res.render('index.html', {
+    sampleGames: sampleGames.get()
+  });
+});
+
+app.get('/games', function(req, res) {
+  res.render('games.html', {
+    sampleGames: sampleGames.get()
+  });
+});
+
+app.get('/docs', function(req, res) {
+  res.render('docs.html', {
+    highlight_js: renderHighlightedCode('js'),
+    highlight_html: renderHighlightedCode('html')
+  });
 });
 
 app.get('/new-bin', function(req, res, next) {

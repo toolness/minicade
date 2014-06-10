@@ -3,7 +3,6 @@
 {% block head %}
 <meta name="makes" content="{{makesJSON}}">
 <link rel="stylesheet" href="/css/minicade.css">
-<link rel="stylesheet" href="/vendor/hljs-railscasts.css">
 {% endblock %}
 
 {% block title %}Minicade: {{bin}}{% endblock %}
@@ -69,9 +68,6 @@
     {% endif %}
     </div>
   </div>
-</section>
-<section class="inverted">
-  {% include "developer-docs.html" %}
 </section>
 {% for make in makes %}{% if make.remixurl %}
 <div class="modal fade" id="remix_{{ loop.index }}">

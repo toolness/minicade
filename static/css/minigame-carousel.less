@@ -1,0 +1,28 @@
+#minigame-carousel {
+  padding: @padding-large-vertical 0;
+}
+
+#minigame-carousel .carousel-control {
+  background-image: none;
+}
+
+@media (max-width: 340px) {
+  #minigame-carousel .carousel-inner .col-sm-4.col-sm-offset-2 {
+    display: none;
+  }
+}
+
+@media (max-width: @screen-xs-max) {
+  #minigame-carousel .iframe-thumbnail-frame {
+    display: inline-block;
+  }
+
+  #minigame-carousel .carousel-inner {
+    text-align: center;
+  }
+
+  #minigame-carousel .carousel-inner .col-sm-4 {
+    margin-left: @carousel-control-width;
+    margin-right: @carousel-control-width;
+  }
+}

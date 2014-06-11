@@ -1,42 +1,5 @@
 {% extends "base.html" %}
 
-{% block head %}
-<style>
-.iframe-thumbnail-frame {
-  background: white;
-}
-
-#minigame-carousel {
-  padding: 20px 0;
-}
-
-#minigame-carousel .carousel-control {
-  background-image: none;
-}
-
-@media (max-width: 340px) {
-  #minigame-carousel .carousel-inner .col-sm-4.col-sm-offset-2 {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  #minigame-carousel .iframe-thumbnail-frame {
-    display: inline-block;
-  }
-
-  #minigame-carousel .carousel-inner {
-    text-align: center;
-  }
-
-  #minigame-carousel .carousel-inner .col-sm-4 {
-    margin-left: 90px;
-    margin-right: 90px;
-  }
-}
-</style>
-{% endblock %}
-
 {% block body %}
 <section>
   <div class="container">

@@ -6,7 +6,8 @@
 - title: Flyswat
   authors: toolness varelidi
   devnotes: Animated entirely with CSS. 40 lines of JavaScript.
-  url: http://jsbin.com/laduqike/3
+  url: http://toolness.github.io/flyswat-minigame/
+  remixurl: https://github.com/toolness/flyswat-minigame
 
 - title: Poundsplat
   authors: stenington

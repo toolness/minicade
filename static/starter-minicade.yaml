@@ -1,6 +1,7 @@
 - title: Flyswat
   description: Swat the fly before time runs out!
-  url: http://jsbin.com/laduqike/3
+  url: http://toolness.github.io/flyswat-minigame/
+  remixurl: https://github.com/toolness/flyswat-minigame
 
 - title: Poundsplat
   description: Make it to the other side of the screen without getting smooshed.

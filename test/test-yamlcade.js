@@ -56,6 +56,7 @@ describe('yamlcade', function() {
     var minicade = yamlcade.parse('- url: https://a.makes.org/foo');
     minicade.games[0].contenturl.should.eql('https://a.makes.org/foo_');
     minicade.games[0].remixurl.should.eql('https://a.makes.org/foo/remix');
+    minicade.games[0].remixaction.should.eql('Remix in Thimble');
   });
 
   it('should handle jsbin.com games specially', function() {
@@ -64,11 +65,19 @@ describe('yamlcade', function() {
 
     minicade = yamlcade.parse('- url: http://jsbin.com/foo/');
     minicade.games[0].remixurl.should.eql('http://jsbin.com/foo/edit');
+    minicade.games[0].remixaction.should.eql('Remix in JS Bin');
   });
 
   it('should handle github.com remixurls specially', function() {
     var minicade = yamlcade.parse('- url: http://boop.me/\n' +
                                   '  remixurl: https://github.com/boop/me');
     minicade.games[0].remixtool.should.eql('GitHub');
+    minicade.games[0].remixaction.should.eql('Fork on GitHub');
+  });
+
+  it('should handle arbitrary remixurls specially', function() {
+    var minicade = yamlcade.parse('- url: http://boop.me/\n' +
+                                  '  remixurl: http://remix.me/boop/me');
+    minicade.games[0].remixaction.should.eql('Remix Game');
   });
 });

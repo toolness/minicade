@@ -42,7 +42,7 @@
               {% endfor %}
             </p>
             <p><small>{{ game.devnotes|safe }}</small></p>
-            <a href="{{ game.remixurl }}" target="_blank" class="btn btn-awsm btn-xs">Remix in {{ game.remixtool }}</a>
+            <a href="{{ game.remixurl }}" target="_blank" class="btn btn-awsm btn-xs">{{ game.remixaction }}</a>
           </div>
         </div>
         {% endfor %}

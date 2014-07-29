@@ -58,8 +58,7 @@
         {% if make.remixurl %}
         <div class="col-sm-4 text-right">
           <h6>
-            <button data-toggle="modal" data-target="#remix_{{ loop.index }}" class="btn btn-awsm btn-awsmblue btn-xs">Remix
-            {% if make.remixtool %}in {{ make.remixtool }}{% else %}Game{% endif %}</button>
+            <button data-toggle="modal" data-target="#remix_{{ loop.index }}" class="btn btn-awsm btn-awsmblue btn-xs">{{ make.remixaction }}</button>
           </h6>
         </div>
         {% endif %}

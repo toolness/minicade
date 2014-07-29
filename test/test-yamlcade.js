@@ -65,4 +65,10 @@ describe('yamlcade', function() {
     minicade = yamlcade.parse('- url: http://jsbin.com/foo/');
     minicade.games[0].remixurl.should.eql('http://jsbin.com/foo/edit');
   });
+
+  it('should handle github.com remixurls specially', function() {
+    var minicade = yamlcade.parse('- url: http://boop.me/\n' +
+                                  '  remixurl: https://github.com/boop/me');
+    minicade.games[0].remixtool.should.eql('GitHub');
+  });
 });

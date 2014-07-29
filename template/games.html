@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 
+{% block head %}
+<style>
+/* TODO: Not a fan of the specificity here. */
+section:not(.yellow) h3 > a.nondescript-link {
+  text-decoration: none;
+}
+
+section:not(.yellow) h3 > a.nondescript-link:hover {
+  text-decoration: underline;
+}
+</style>
+{% endblock %}
+
 {% block title %}Minicade: Example Games{% endblock %}
 
 {% block body %}
@@ -16,7 +29,7 @@
         <div class="iframe-thumbnail-frame">
           <div class="iframe-thumbnail-holder" data-loop-microgame="{{ game.contenturl }}"></div>
         </div>
-        <h3>{{ game.title }}</h3>
+        <h3><a href="{{ game.url }}" class="nondescript-link">{{ game.title }}</a></h3>
         <p>By 
           {% for author in game.authors %}
             {% if not loop.first %}and{% endif %}

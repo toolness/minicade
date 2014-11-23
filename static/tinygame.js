@@ -1,3 +1,8 @@
+/*!
+ * Tinygame v0.2
+ * https://github.com/toolness/fancy-friday
+ */
+
 var Tinygame = (function() {
   var DEFAULTS = {playTime: 5, endingTime: 2, difficulty: "easy"};
 
@@ -6,6 +11,7 @@ var Tinygame = (function() {
   var inDevelopmentMode = !('playTime' in queryArgs) || queryArgs.dev == '1';
   var metagame = inDevelopmentMode ? window : window.parent;
   var script = document.scripts[document.scripts.length-1];
+  var preventReadyOnLoad = false;
 
   function getArg(name) {
     var attrName = 'data-' + name.toLowerCase();
@@ -37,6 +43,7 @@ var Tinygame = (function() {
     var timeBar = document.createElement('div');
     var timeRemaining = document.createElement('div');
     var outOfTimeTimeout;
+    var hasStartedPlaying = false;
 
     function cleanup() {
       clearTimeout(outOfTimeTimeout);
@@ -45,6 +52,17 @@ var Tinygame = (function() {
         timeBar = null;
         timeRemaining = null;
       }
+    }
+
+    function startPlaying() {
+      if (hasStartedPlaying) return;
+      hasStartedPlaying = true;
+      timeRemaining.style.width = "0";
+      window.postMessage({type: "play"}, "*");
+      outOfTimeTimeout = setTimeout(function() {
+        cleanup();
+        window.postMessage({type: "outoftime"}, "*");
+      }, Tinygame.playTime * 1000);
     }
 
     function addTimeBar() { document.body.appendChild(timeBar); }
@@ -79,26 +97,27 @@ var Tinygame = (function() {
         }
       }, true);
 
-    window.addEventListener("load", function() {
-      timeRemaining.style.width = "0";
-      window.postMessage({type: "play"}, "*");
-      outOfTimeTimeout = setTimeout(function() {
-        cleanup();
-        window.postMessage({type: "outoftime"}, "*");
-      }, Tinygame.playTime * 1000);
-    }, false);
-
     window.addEventListener("message", function(event) {
       var data = event.data;
 
       if (!data) return;
-      if (data.type == 'end') cleanup();
+      if (data.type == 'ready') {
+        startPlaying();        
+      } else if (data.type == 'end') {
+        cleanup();
+      }
     });
   }
 
   Tinygame.playTime = getTimeArg('playTime');
   Tinygame.endingTime = getTimeArg('endingTime');
   Tinygame.difficulty = getArg('difficulty');
+  Tinygame.loading = function() {
+    preventReadyOnLoad = true;
+  };
+  Tinygame.loaded = function() {
+    metagame.postMessage({type: 'ready'}, '*');
+  };
   Tinygame.end = function(score) {
     var data = {type: 'end'};
     if (typeof(score) == 'number') data.score = score;
@@ -106,6 +125,11 @@ var Tinygame = (function() {
   };
   Tinygame.win = Tinygame.end.bind(Tinygame, 1.0);
   Tinygame.lose = Tinygame.end.bind(Tinygame, 0);
+
+  window.addEventListener("load", function() {
+    if (!preventReadyOnLoad)
+      metagame.postMessage({type: 'ready'}, '*');
+  }, false);
 
   window.addEventListener("message", function(event) {
     if (!event.data || typeof(event.data) != "object") return;

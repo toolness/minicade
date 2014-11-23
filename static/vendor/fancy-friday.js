@@ -1,7 +1,13 @@
+/*!
+ * Fancy Friday v0.2
+ * https://github.com/toolness/fancy-friday
+ */
+
 var FancyFriday = (function() {
   var FOCUS_CHECK_INTERVAL = 10;
   var DEFAULT_PLAY_TIME = 5;
   var DEFAULT_ENDING_TIME = 2;
+  var DEFAULT_MAX_LOAD_TIME = 10;
   var DEFAULT_DIFFICULTY = "easy";
   var SANDBOX_PERMISSIONS = [
     'allow-same-origin',
@@ -28,6 +34,8 @@ var FancyFriday = (function() {
     var difficulty = options.difficulty || DEFAULT_DIFFICULTY;
     var playTime = options.playTime || DEFAULT_PLAY_TIME;
     var endingTime = options.endingTime || DEFAULT_ENDING_TIME;
+    var maxLoadTime = options.maxLoadTime || DEFAULT_MAX_LOAD_TIME;
+    var loadedTimeout;
     var outOfTimeTimeout;
 
     if (typeof(options.sandbox) == 'undefined')
@@ -63,11 +71,22 @@ var FancyFriday = (function() {
     microgame.score = 0;
     microgame.autoplay = options.autoplay || false;
 
+    microgame.ready = function() {
+      clearTimeout(loadedTimeout);
+      microgame.microgameState = microgame.MICROGAME_READY;
+      microgame.dispatchEvent(new CustomEvent("microgameready"));      
+    };
+
     microgame.handleMessage = function(data) {
       data = typeof(data) == 'string' ? {type: data} : data;
 
       if (!data) return;
       if (data.score >= 0 && data.score <= 1) microgame.score = data.score;
+
+      if (data.type == "ready" &&
+          microgame.microgameState == microgame.MICROGAME_LOADING) {
+        microgame.ready();
+      }
 
       if (data.type == "end")
         microgame.dispatchEvent(new CustomEvent("microgameending"));
@@ -100,12 +119,7 @@ var FancyFriday = (function() {
       }, FOCUS_CHECK_INTERVAL);
     };
 
-    iframe.addEventListener("load", function() {
-      if (microgame.microgameState != microgame.MICROGAME_LOADING) return;
-
-      microgame.microgameState = microgame.MICROGAME_READY;
-      microgame.dispatchEvent(new CustomEvent("microgameready"));
-    });
+    loadedTimeout = setTimeout(microgame.ready, maxLoadTime * 1000);
 
     microgame.addEventListener("microgameready", function(e) {
       if (microgame.autoplay) microgame.play();

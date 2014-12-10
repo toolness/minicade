@@ -42,7 +42,16 @@ _.extend(app.locals, {
 
 // TODO: Add CSRF middleware.
 app.use(bodyParser());
-app.use(express.static(STATIC_DIR));
+
+if (DEBUG)
+  app.get('/js/bundle.js', function(req, res) {
+    var fromArgs = require('browserify/bin/args');
+    var args = require('./package.json').scripts.build.split(' ').slice(2);
+    var b = fromArgs(args);
+
+    res.type('application/javascript');
+    b.bundle().pipe(res);
+  });
 
 app.get('/css/base.css', renderLess('base.less'));
 
@@ -147,6 +156,8 @@ app.get('/t/:tag', function(req, res, next) {
     });
   });
 });
+
+app.use(express.static(STATIC_DIR));
 
 app.use(function(err, req, res, next) {
   if (typeof(err) == 'number')

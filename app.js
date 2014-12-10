@@ -46,6 +46,11 @@ app.use(express.static(STATIC_DIR));
 
 app.get('/css/base.css', renderLess('base.less'));
 
+app.param('firebaseBin', function(req, res, next, param) {
+  if (!tagging.isValidTag(param)) return next('route');
+  next();
+});
+
 app.param('tag', function(req, res, next, param) {
   if (!tagging.isValidTag(param)) return next('route');
   next();
@@ -84,6 +89,12 @@ app.get('/new-bin', function(req, res, next) {
   yamlbin.findUnique(randomTagGenerator, function(err, bin) {
     if (err) return next(err);
     res.redirect('/b/' + bin);
+  });
+});
+
+app.get('/f/:firebaseBin', function(req, res, next) {
+  res.render('firebase-based-minicade.html', {
+    bin: req.params.firebaseBin
   });
 });
 

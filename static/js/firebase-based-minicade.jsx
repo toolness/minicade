@@ -1,46 +1,5 @@
 (function() {
-  var _ = require('underscore');
-
-  function FakeBackend(listener) {
-    this.games = [];
-    this._listener = listener;
-    setTimeout(this._listener.bind(this, this.games), 0);
-  }
-
-  FakeBackend.prototype = {
-    addGame: function(game) {
-      game = _.pick(game, 'title', 'description', 'url');
-      game.id = Math.floor(Math.random() * 10000000).toString(16);
-      this.games = React.addons.update(this.games, {
-        $push: [game]
-      });
-      this._listener(this.games);
-      return game.id;
-    },
-    changeGame: function(id, props) {
-      var game = _.findWhere(this.games, {id: id});
-      var index = this.games.indexOf(game);
-      var changes = {};
-
-      changes[index] = {};
-      props = _.pick(props, 'title', 'description', 'url');
-      Object.keys(props).forEach(function(key) {
-        changes[index][key] = {$set: props[key]};
-      });
-      this.games = React.addons.update(this.games, changes);
-      this._listener(this.games);
-    },
-    removeGame: function(id) {
-      var game = _.findWhere(this.games, {id: id});
-      var index = this.games.indexOf(game);
-
-      this.games = React.addons.update(this.games, {
-        $splice: [[index, 1]]
-      });
-
-      this._listener(this.games);
-    }
-  };
+  var FakeBackend = require('/lib/fake-backend');
 
   var GameRow = React.createClass({
     handleEdit: function() {
@@ -201,9 +160,9 @@
   $(function() {
     var bin = $('meta[name=bin]').attr('content');
 
-    function renderApp(games) {
+    function renderApp(backend) {
       var app = React.render(
-        <FirebaseMinicade bin={bin} backend={backend} games={games}/>,
+        <FirebaseMinicade bin={bin} backend={backend} games={backend.games}/>,
         $('#page')[0]
       );
       // For use in debug console only!

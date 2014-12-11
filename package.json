@@ -15,6 +15,7 @@
     "highlight.js": "8.0.0",
     "lru-cache": "2.5.0",
     "browserify": "7.0.0",
+    "react": "0.12.0",
     "nunjucks": "1.0.4"
   },
   "devDependencies": {

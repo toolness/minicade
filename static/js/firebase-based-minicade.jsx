@@ -1,5 +1,5 @@
 (function() {
-  var FakeBackend = require('/lib/fake-backend');
+  var FakeBackend = require('./lib/fake-backend');
 
   var GameRow = React.createClass({
     handleEdit: function() {

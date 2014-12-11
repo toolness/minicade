@@ -6,6 +6,7 @@ var tagging = require('./lib/tagging');
 var yamlcade = require('./lib/yamlcade');
 var makeapi = require('./lib/makeapi');
 var template = require('./lib/template');
+var bundle = require('./lib/bundle');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
@@ -45,12 +46,8 @@ app.use(bodyParser());
 
 if (DEBUG)
   app.get('/js/bundle.js', function(req, res) {
-    var fromArgs = require('browserify/bin/args');
-    var args = require('./package.json').scripts.build.split(' ').slice(2);
-    var b = fromArgs(args);
-
     res.type('application/javascript');
-    b.bundle().pipe(res);
+    bundle.generate().pipe(res);
   });
 
 app.get('/css/base.css', renderLess('base.less'));

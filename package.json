@@ -23,7 +23,7 @@
     "should": "3.1.3"
   },
   "scripts": {
-    "build": "node ./node_modules/.bin/browserify -r ./stubs/react-with-addons.js:react/addons -r underscore -r ./lib/fake-backend -r ./lib/minicade-schema -o static/js/bundle.js",
+    "build": "node lib/bundle.js",
     "postinstall": "npm run build",
     "test": "node ./node_modules/mocha/bin/mocha -R spec"
   },

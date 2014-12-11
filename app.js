@@ -47,7 +47,7 @@ app.use(bodyParser());
 if (DEBUG)
   app.get('/js/bundle.js', function(req, res) {
     res.type('application/javascript');
-    bundle.generate().pipe(res);
+    bundle.generate({debug: true}).pipe(res);
   });
 
 app.get('/css/base.css', renderLess('base.less'));

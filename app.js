@@ -1,4 +1,6 @@
+var http = require('http');
 var _ = require('underscore');
+var WebSocketServer = require('ws').Server;
 var MongoClient = require('mongodb').MongoClient;
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -8,6 +10,7 @@ var makeapi = require('./lib/makeapi');
 var template = require('./lib/template');
 var storages = require('./lib/storages');
 var bundle = require('./lib/bundle');
+var firebase = require('./lib/firebase');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
@@ -168,26 +171,42 @@ app.use(function(err, req, res, next) {
 });
 
 if (!module.parent) (function startServer() {
-  var storage;
+  var yamlStorage;
+  var firebaseStorage;
 
   function listen() {
-    yamlbin = Yamlbin({storage: storage, debug: DEBUG});
-    app.listen(PORT, function() {
+    var server = http.createServer(app);
+    var wss = new WebSocketServer({server: server});
+
+    yamlbin = Yamlbin({storage: yamlStorage, debug: DEBUG});
+    firebase.setStorage(firebaseStorage);
+    server.listen(PORT, function() {
       console.log('Listening on port', PORT);
+    });
+
+    wss.on('connection', function(ws) {
+      var match = ws.upgradeReq.url.match(/\/f\/([A-Za-z0-9\-]+)/);
+      if (!match) return ws.close();
+      firebase.connection(ws, match[1]);
     });
   }
 
   if (MONGODB_URL) {
     MongoClient.connect(MONGODB_URL, function(err, db) {
       if (err) throw err;
-      storage = storages.MongoStorage(db, {
+      yamlStorage = storages.MongoStorage(db, {
         collection: 'yamlbin',
         contentKey: 'yaml'
+      });
+      firebaseStorage = storages.MongoStorage(db, {
+        collection: 'firebase',
+        contentKey: 'games'
       });
       listen();
     });
   } else {
-    storage = storages.MemStorage();
+    yamlStorage = storages.MemStorage();
+    firebaseStorage = storages.MemStorage();
     listen();
   }
 })();

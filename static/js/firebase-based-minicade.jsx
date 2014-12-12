@@ -1,6 +1,4 @@
 (function() {
-  var FakeBackend = require('./lib/fake-backend');
-
   var GameRow = React.createClass({
     handleEdit: function() {
       this.props.onEdit(this.props.game);
@@ -159,19 +157,53 @@
 
   $(function() {
     var bin = $('meta[name=bin]').attr('content');
+    var games = [];
 
-    function renderApp(backend) {
+    function renderApp() {
       var app = React.render(
-        <FirebaseMinicade bin={bin} backend={backend} games={backend.games}/>,
+        <FirebaseMinicade bin={bin} backend={backend} games={games}/>,
         $('#page')[0]
       );
       // For use in debug console only!
       window.app = app;
     }
 
-    var backend = new FakeBackend(renderApp);
+    var send = function(data) {
+      // TODO: What if we're not connected to the server yet?
+      ws.send(JSON.stringify(data));
+    };
 
-    // For use in debug console only!
-    window.backend = backend;
+    var backend = {
+      addGame: function(game) {
+        send({cmd: 'addGame', args: [game]});
+      },
+      changeGame: function(id, props) {
+        send({cmd: 'changeGame', args: [id, props]});
+      },
+      removeGame: function(id) {
+        send({cmd: 'removeGame', args: [id]});
+      }
+    };
+
+    var frontend = {
+      setGames: function(newGames) {
+        games = newGames;
+        renderApp();
+      },
+      updateGames: function(changes) {
+        games = React.addons.update(games, changes);
+        renderApp();
+      }
+    };
+
+    var ws = new WebSocket('ws://' + location.host + '/f/' + bin);
+    ws.addEventListener('close', function() {
+      // TODO: Attempt to re-establish the connection.
+    });
+    ws.addEventListener('message', function(event) {
+      var data = JSON.parse(event.data);
+
+      frontend[data.cmd].apply(frontend, data.args);
+    });
   });
 })();

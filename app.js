@@ -6,6 +6,7 @@ var tagging = require('./lib/tagging');
 var yamlcade = require('./lib/yamlcade');
 var makeapi = require('./lib/makeapi');
 var template = require('./lib/template');
+var storages = require('./lib/storages');
 var bundle = require('./lib/bundle');
 
 var PORT = process.env.PORT || 3000;
@@ -179,11 +180,14 @@ if (!module.parent) (function startServer() {
   if (MONGODB_URL) {
     MongoClient.connect(MONGODB_URL, function(err, db) {
       if (err) throw err;
-      storage = Yamlbin.MongoStorage(db);
+      storage = storages.MongoStorage(db, {
+        collection: 'yamlbin',
+        contentKey: 'yaml'
+      });
       listen();
     });
   } else {
-    storage = Yamlbin.MemStorage();
+    storage = storages.MemStorage();
     listen();
   }
 })();

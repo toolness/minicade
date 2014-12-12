@@ -1,6 +1,7 @@
 var should = require('should');
 
 var Yamlbin = require('../lib/yamlbin');
+var storages = require('../lib/storages');
 
 describe('yamlbin', function() {
   it('should find unique bins', function(done) {
@@ -9,7 +10,7 @@ describe('yamlbin', function() {
       if (++i < 50) return 'foo';
       return 'bar';
     };
-    var storage = new Yamlbin.MemStorage();
+    var storage = new storages.MemStorage();
     var bin = new Yamlbin({storage: storage});
     bin.findUnique(generator, function(err, name) {
       if (err) return done(err);

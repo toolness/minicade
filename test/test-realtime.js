@@ -191,4 +191,15 @@ describe('realtime', function() {
       done();
     });
   });
+
+  it('should not throw on invalid args', function(done) {
+    var binStream = realtime.connection(FakeWs(), 'lol');
+    binStream._processMessage({
+      cmd: 'removeGame',
+      args: ['boop']
+    }, function(err) {
+      err.message.should.eql("invalid id: boop");
+      done();
+    });
+  });
 });

@@ -50,7 +50,7 @@ describe('Realtime Ops', function() {
       description: "sup",
       url: "http://example.org/"
     });
-    backend.removeGame("boop");
+    backend.removeGame("guid");
     backend.games.should.eql([]);    
   });
 });

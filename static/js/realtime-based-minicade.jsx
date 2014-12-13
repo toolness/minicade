@@ -39,7 +39,7 @@
         id: this.props.game.id,
         title: this.refs.title.getDOMNode().value,
         description: this.refs.description.getDOMNode().value,
-        url: this.refs.description.getDOMNode().value
+        url: this.refs.url.getDOMNode().value
       });
     },
     handleCancel: function(e) {

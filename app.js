@@ -10,7 +10,7 @@ var makeapi = require('./lib/makeapi');
 var template = require('./lib/template');
 var storages = require('./lib/storages');
 var bundle = require('./lib/bundle');
-var firebase = require('./lib/firebase');
+var realtime = require('./lib/realtime');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
@@ -56,7 +56,7 @@ if (DEBUG)
 
 app.get('/css/base.css', renderLess('base.less'));
 
-app.param('firebaseBin', function(req, res, next, param) {
+app.param('realtimeBin', function(req, res, next, param) {
   if (!tagging.isValidTag(param)) return next('route');
   next();
 });
@@ -102,9 +102,9 @@ app.get('/new-bin', function(req, res, next) {
   });
 });
 
-app.get('/f/:firebaseBin', function(req, res, next) {
-  res.render('firebase-based-minicade.html', {
-    bin: req.params.firebaseBin
+app.get('/f/:realtimeBin', function(req, res, next) {
+  res.render('realtime-based-minicade.html', {
+    bin: req.params.realtimeBin
   });
 });
 
@@ -172,14 +172,14 @@ app.use(function(err, req, res, next) {
 
 if (!module.parent) (function startServer() {
   var yamlStorage;
-  var firebaseStorage;
+  var realtimeStorage;
 
   function listen() {
     var server = http.createServer(app);
     var wss = new WebSocketServer({server: server});
 
     yamlbin = Yamlbin({storage: yamlStorage, debug: DEBUG});
-    firebase.setStorage(firebaseStorage);
+    realtime.setStorage(realtimeStorage);
     server.listen(PORT, function() {
       console.log('Listening on port', PORT);
     });
@@ -187,7 +187,7 @@ if (!module.parent) (function startServer() {
     wss.on('connection', function(ws) {
       var match = ws.upgradeReq.url.match(/\/f\/([A-Za-z0-9\-]+)/);
       if (!match) return ws.close();
-      firebase.connection(ws, match[1]);
+      realtime.connection(ws, match[1]);
     });
   }
 
@@ -198,15 +198,15 @@ if (!module.parent) (function startServer() {
         collection: 'yamlbin',
         contentKey: 'yaml'
       });
-      firebaseStorage = storages.MongoStorage(db, {
-        collection: 'firebase',
+      realtimeStorage = storages.MongoStorage(db, {
+        collection: 'realtime',
         contentKey: 'games'
       });
       listen();
     });
   } else {
     yamlStorage = storages.MemStorage();
-    firebaseStorage = storages.MemStorage();
+    realtimeStorage = storages.MemStorage();
     listen();
   }
 })();

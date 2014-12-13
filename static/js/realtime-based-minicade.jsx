@@ -63,7 +63,7 @@
     }
   });
 
-  var FirebaseMinicade = React.createClass({
+  var RealtimeMinicade = React.createClass({
     getInitialState: function() {
       return {
         editingGame: null,
@@ -161,7 +161,7 @@
 
     function renderApp() {
       var app = React.render(
-        <FirebaseMinicade bin={bin} backend={backend} games={games}/>,
+        <RealtimeMinicade bin={bin} backend={backend} games={games}/>,
         $('#page')[0]
       );
       // For use in debug console only!

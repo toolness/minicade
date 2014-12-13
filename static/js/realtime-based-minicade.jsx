@@ -53,9 +53,9 @@
         <div className="row">
           <div className="col-sm-8">
             <form onSubmit={this.handleSubmit}>
-              <input ref="title" type="text" defaultValue={game.title} placeholder="title"/>
+              <input ref="title" type="text" required defaultValue={game.title} placeholder="title"/>
               <input ref="description" type="text" defaultValue={game.description} placeholder="description"/>
-              <input ref="url" type="text" defaultValue={game.url} placeholder="http://"/>
+              <input ref="url" type="url" required defaultValue={game.url} placeholder="http://"/>
               <button type="submit">Save</button>
               <button onClick={this.handleCancel}>Cancel</button>
             </form>

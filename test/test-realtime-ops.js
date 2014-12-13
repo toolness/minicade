@@ -9,7 +9,7 @@ describe('Realtime Ops', function() {
   });
 
   it('should add games', function() {
-    var backend = new Ops(null, function() { return "guid"; });
+    var backend = new Ops(function() { return "guid"; });
 
     backend.addGame({
       title: "boop",
@@ -26,7 +26,7 @@ describe('Realtime Ops', function() {
   });
 
   it('should update games', function() {
-    var backend = new Ops(null, function() { return "guid"; });
+    var backend = new Ops(function() { return "guid"; });
 
     backend.addGame({
       title: "boop",
@@ -43,7 +43,7 @@ describe('Realtime Ops', function() {
   });
 
   it('should remove games', function() {
-    var backend = new Ops(null, function() { return "guid"; });
+    var backend = new Ops(function() { return "guid"; });
 
     backend.addGame({
       title: "boop",

@@ -164,4 +164,31 @@ describe('realtime', function() {
       conn.end();
     });
   });
+
+  it('should not throw on malformed messages', function() {
+    var binStream = realtime.connection(FakeWs(), 'lol');
+    binStream._onMessage('lol');
+  });
+
+  it('should not throw on illegal commands', function(done) {
+    var binStream = realtime.connection(FakeWs(), 'lol');
+    binStream._processMessage({
+      cmd: '__proto__',
+      args: []
+    }, function(err) {
+      err.message.should.match(/illegal command/);
+      done();
+    });
+  });
+
+  it('should not throw on nonexistent commands', function(done) {
+    var binStream = realtime.connection(FakeWs(), 'lol');
+    binStream._processMessage({
+      cmd: 'lol',
+      args: ['hi']
+    }, function(err) {
+      err.message.should.match(/no such command/);
+      done();
+    });
+  });
 });

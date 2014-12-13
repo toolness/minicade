@@ -197,9 +197,6 @@ describe('realtime', function() {
     binStream._processMessage({
       cmd: 'removeGame',
       args: ['boop']
-    }, function(err) {
-      err.message.should.eql("invalid id: boop");
-      done();
-    });
+    }, done);
   });
 });

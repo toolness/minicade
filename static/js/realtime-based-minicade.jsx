@@ -1,4 +1,6 @@
 (function() {
+  var RealtimeClient = require('./lib/realtime/client');
+
   var GameRow = React.createClass({
     handleEdit: function() {
       this.props.onEdit(this.props.game);
@@ -157,53 +159,27 @@
 
   $(function() {
     var bin = $('meta[name=bin]').attr('content');
-    var games = [];
 
     function renderApp() {
       var app = React.render(
-        <RealtimeMinicade bin={bin} backend={backend} games={games}/>,
+        <RealtimeMinicade bin={bin} backend={backend} games={backend.games}/>,
         $('#page')[0]
       );
       // For use in debug console only!
       window.app = app;
     }
 
-    var send = function(data) {
+    var backend = RealtimeClient(function sendMessage(data) {
       // TODO: What if we're not connected to the server yet?
       ws.send(JSON.stringify(data));
-    };
-
-    var backend = {
-      addGame: function(game) {
-        send({cmd: 'addGame', args: [game]});
-      },
-      changeGame: function(id, props) {
-        send({cmd: 'changeGame', args: [id, props]});
-      },
-      removeGame: function(id) {
-        send({cmd: 'removeGame', args: [id]});
-      }
-    };
-
-    var frontend = {
-      setGames: function(newGames) {
-        games = newGames;
-        renderApp();
-      },
-      updateGames: function(changes) {
-        games = React.addons.update(games, changes);
-        renderApp();
-      }
-    };
+    }, renderApp);
 
     var ws = new WebSocket('ws://' + location.host + '/f/' + bin);
     ws.addEventListener('close', function() {
       // TODO: Attempt to re-establish the connection.
     });
     ws.addEventListener('message', function(event) {
-      var data = JSON.parse(event.data);
-
-      frontend[data.cmd].apply(frontend, data.args);
+      backend.receiveMessage(JSON.parse(event.data));
     });
   });
 })();

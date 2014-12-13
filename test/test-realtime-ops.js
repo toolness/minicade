@@ -1,15 +1,15 @@
 var should = require('should');
 
-var FakeBackend = require('../lib/fake-backend');
+var Ops = require('../lib/realtime/ops');
 
-describe('FakeBackend', function() {
+describe('Realtime Ops', function() {
   it('should start with no games', function() {
-    var backend = new FakeBackend();
+    var backend = new Ops();
     backend.games.should.eql([]);
   });
 
   it('should add games', function() {
-    var backend = new FakeBackend(null, function() { return "guid"; });
+    var backend = new Ops(null, function() { return "guid"; });
 
     backend.addGame({
       title: "boop",
@@ -26,7 +26,7 @@ describe('FakeBackend', function() {
   });
 
   it('should update games', function() {
-    var backend = new FakeBackend(null, function() { return "guid"; });
+    var backend = new Ops(null, function() { return "guid"; });
 
     backend.addGame({
       title: "boop",
@@ -43,7 +43,7 @@ describe('FakeBackend', function() {
   });
 
   it('should remove games', function() {
-    var backend = new FakeBackend(null, function() { return "guid"; });
+    var backend = new Ops(null, function() { return "guid"; });
 
     backend.addGame({
       title: "boop",

@@ -20,10 +20,12 @@
       this.props.onClone(this.props.game);
     },
     handleRemix: function(e) {
-      window.open(this.props.game.remixurl);
+      var embellishedGame = RealtimeClient.embellish(this.props.game);
+      window.open(embellishedGame.remixurl);
     },
     render: function() {
       var game = this.props.game;
+      var embellishedGame = RealtimeClient.embellish(this.props.game);
 
       return (
         <div className="row">
@@ -36,9 +38,9 @@
               <li><a href="#" onClick={this.handleEdit}><span className="glyphicon glyphicon-pencil"></span><span className="sr-only">Edit</span></a></li>
               <li><a href="#" onClick={this.handleRemove}><span className="glyphicon glyphicon-trash"></span><span className="sr-only">Remove</span></a></li>
               <li><a href="#" onClick={this.handleClone}><span className="glyphicon glyphicon-retweet"></span><span className="sr-only">Clone</span></a></li>
-              {game.remixurl
+              {embellishedGame.remixurl
                ? <li>
-                   <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemix}>Remix Game</button>
+                   <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemix}>{embellishedGame.remixaction}</button>
                  </li>
                : null}
             </ul>
@@ -231,7 +233,10 @@
 
       // For use by minicade.js.
       window.MAKES = backend.games.map(function(game) {
-        return {title: game.title, contenturl: game.url};
+        return {
+          title: game.title,
+          contenturl: RealtimeClient.embellish(game).contenturl
+        };
       });
     });
 

@@ -209,26 +209,41 @@
     }
   });
 
-  var ConnectionStatus = React.createClass({
+  var Timeago = React.createClass({
+    UPDATE_INTERVAL: 10000,
     getInitialState: function() {
-      return {
-        disconnectedTimeago: null
-      };
+      return {timeago: timeago(this.props.time)};
     },
-    componentWillReceiveProps: function(nextProps) {
-      if (this.props.connected && !nextProps.connected) {
-        this.disconnectedAt = Date.now();
-        this.interval = window.setInterval(this.updateTimeago, 10000);
-        this.updateTimeago();
-      } else if (!this.props.connected && nextProps.connected) {
-        window.clearInterval(this.interval);
-      }
-    },
-    updateTimeago: function() {
-      this.setState({disconnectedTimeago: timeago(this.disconnectedAt)});
+    componentDidMount: function() {
+      this.interval = window.setInterval(this.updateTimeago,
+                                         this.UPDATE_INTERVAL);
     },
     componentWillUnmount: function() {
       window.clearInterval(this.interval);
+    },
+    componentWillReceiveProps: function(nextProps) {
+      this.updateTimeago(nextProps.time);
+    },
+    updateTimeago: function(time) {
+      var newTimeago = timeago(time || this.props.time);
+      if (newTimeago != this.state.timeago)
+        this.setState({timeago: newTimeago});
+    },
+    render: function() {
+      return <span>{this.state.timeago}</span>;
+    }
+  });
+
+  var ConnectionStatus = React.createClass({
+    getInitialState: function() {
+      return {disconnectTime: null};
+    },
+    componentWillReceiveProps: function(nextProps) {
+      if (this.props.connected && !nextProps.connected) {
+        this.setState({disconnectTime: Date.now()});
+      } else if (!this.props.connected && nextProps.connected) {
+        this.setState({disconnectTime: null});
+      }
     },
     render: function() {
       return (
@@ -239,10 +254,13 @@
           webkitTransition: 'opacity 0.5s'
         }}><small>
           <span className="glyphicon glyphicon-flash"></span>
-          {this.state.disconnectedTimeago
-           ? "Disconnected from server " + this.state.disconnectedTimeago +
-             ". Reconnecting\u2026"
-           : "Connecting to server\u2026"}
+          {this.state.disconnectTime
+           ? <span>
+               Disconnected from server
+               <Timeago time={this.state.disconnectTime}/>.
+               Reconnecting&hellip;
+             </span>
+           : <span>Connecting to server&hellip;</span>}
         </small></p>
       );
     }

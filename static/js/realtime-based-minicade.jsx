@@ -19,6 +19,9 @@
       e.preventDefault();
       this.props.onClone(this.props.game);
     },
+    handleRemix: function(e) {
+      window.open(this.props.game.remixurl);
+    },
     render: function() {
       var game = this.props.game;
 
@@ -29,6 +32,11 @@
             <p><small>{game.description}</small></p>
           </div>
           <div className="col-sm-4 text-right">
+            {game.remixurl
+             ? <h6>
+                 <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemix}>Remix Game</button>
+               </h6>
+             : null}
             <ul className="list-inline" style={{marginTop: 10, marginBottom: 10}}>
               <li><a href="#" onClick={this.handleEdit}><span className="glyphicon glyphicon-pencil"></span><span className="sr-only">Edit</span></a></li>
               <li><a href="#" onClick={this.handleRemove}><span className="glyphicon glyphicon-trash"></span><span className="sr-only">Remove</span></a></li>
@@ -50,7 +58,8 @@
         id: this.props.game.id,
         title: this.refs.title.getDOMNode().value,
         description: this.refs.description.getDOMNode().value,
-        url: this.refs.url.getDOMNode().value
+        url: this.refs.url.getDOMNode().value,
+        remixurl: this.refs.remixurl.getDOMNode().value
       });
     },
     handleCancel: function(e) {
@@ -77,6 +86,10 @@
               <div className="form-group">
                 <label>URL (required)</label>
                 <input ref="url" className="form-control input-sm" type="url" required defaultValue={game.url} placeholder="http://"/>
+              </div>
+              <div className="form-group">
+                <label>Remix URL</label>
+                <input ref="remixurl" className="form-control input-sm" type="url" defaultValue={game.remixurl} placeholder="http://"/>
               </div>
               <ul className="list-inline">
                 <li><button className="btn btn-awsm btn-xs" type="submit">Save</button></li>
@@ -112,7 +125,8 @@
           id: null,
           title: game.title,
           description: game.description,
-          url: game.url
+          url: game.url,
+          remixurl: game.remixurl
         }
       });
     },
@@ -130,7 +144,8 @@
           id: null,
           title: '',
           description: '',
-          url: ''
+          url: '',
+          remixurl: ''
         }
       });
     },

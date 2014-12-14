@@ -293,6 +293,11 @@
             {this.state.modal}
             <h2 className="subheading">
               <span className="tag-name">{bin}</span>
+              {this.props.connected
+               ? null
+               : <div style={{float: 'right', color: 'red'}}>
+                  <span className="glyphicon glyphicon-flash" title="Connection to server lost."></span>
+                 </div>}
             </h2>
             {games.length
              ? <div>
@@ -318,12 +323,10 @@
 
   $(function() {
     var bin = $('meta[name=bin]').attr('content');
-    var backend = RealtimeClient(function sendMessage(data) {
-      // TODO: What if we're not connected to the server yet?
-      ws.send(JSON.stringify(data));
-    }, function onChange() {
+    var onChange = function() {
+      var connected = (ws.readyState == WebSocket.OPEN);
       var app = React.render(
-        <RealtimeMinicade bin={bin} backend={backend} games={backend.games}/>,
+        <RealtimeMinicade bin={bin} backend={backend} games={backend.games} connected={connected}/>,
         $('#page')[0]
       );
       // For use in debug console only!
@@ -336,14 +339,18 @@
           contenturl: RealtimeClient.embellish(game).contenturl
         };
       });
-    });
+    };
+    var backend = RealtimeClient(function sendMessage(data) {
+      // TODO: What if we're not connected to the server yet?
+      ws.send(JSON.stringify(data));
+    }, onChange);
 
     var ws = new WebSocket('ws://' + location.host + '/f/' + bin);
-    ws.addEventListener('close', function() {
-      // TODO: Attempt to re-establish the connection.
-    });
+    ws.addEventListener('open', onChange);
+    ws.addEventListener('close', onChange);
     ws.addEventListener('message', function(event) {
       backend.receiveMessage(JSON.parse(event.data));
     });
+    onChange();
   });
 })();

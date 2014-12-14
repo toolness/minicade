@@ -73,13 +73,15 @@
             <br/>
             <p>Enter information about the minigame below.</p>
             <form className="form" role="form" onSubmit={this.handleSubmit}>
-              <div className="form-group">
-                <label>Title (required)</label>
-                <input ref="title" className="form-control input-sm" type="text" required defaultValue={game.title}/>
-              </div>
-              <div className="form-group">
-                <label>Description</label>
-                <input ref="description" className="form-control input-sm" type="text" defaultValue={game.description}/>
+              <div className="row">
+                <div className="col-sm-6 form-group">
+                  <label>Title (required)</label>
+                  <input ref="title" className="form-control input-sm" type="text" required defaultValue={game.title}/>
+                </div>
+                <div className="col-sm-6 form-group">
+                  <label>Description</label>
+                  <input ref="description" className="form-control input-sm" type="text" defaultValue={game.description}/>
+                </div>
               </div>
               <div className="form-group">
                 <label>URL (required)</label>

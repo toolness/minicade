@@ -15,6 +15,10 @@
         this.props.onRemove(this.props.game);
       }
     },
+    handleClone: function(e) {
+      e.preventDefault();
+      this.props.onClone(this.props.game);
+    },
     render: function() {
       var game = this.props.game;
 
@@ -28,6 +32,7 @@
             <ul className="list-inline" style={{marginTop: 10, marginBottom: 10}}>
               <li><a href="#" onClick={this.handleEdit}><span className="glyphicon glyphicon-pencil"></span><span className="sr-only">Edit</span></a></li>
               <li><a href="#" onClick={this.handleRemove}><span className="glyphicon glyphicon-trash"></span><span className="sr-only">Remove</span></a></li>
+              <li><a href="#" onClick={this.handleClone}><span className="glyphicon glyphicon-retweet"></span><span className="sr-only">Clone</span></a></li>
             </ul>
           </div>
         </div>
@@ -100,6 +105,17 @@
         newGame: null
       });
     },
+    handleCloneGame: function(game) {
+      this.setState({
+        editingGame: null,
+        newGame: {
+          id: null,
+          title: game.title,
+          description: game.description,
+          url: game.url
+        }
+      });
+    },
     handleEditGameSubmit: function(game) {
       this.setState({editingGame: null});
       this.props.backend.changeGame(game.id, game);
@@ -137,7 +153,7 @@
               return (
                 this.state.editingGame == game.id
                 ? <AddOrEditGameRow key={game.id} game={game} onSubmit={this.handleEditGameSubmit} onCancel={this.handleEditGameCancel}/>
-                : <GameRow key={game.id} game={game} onEdit={this.handleEditGame} onRemove={this.handleRemoveGame}/>
+                : <GameRow key={game.id} game={game} onEdit={this.handleEditGame} onRemove={this.handleRemoveGame} onClone={this.handleCloneGame}/>
               );
             }, this)}
             {this.state.newGame

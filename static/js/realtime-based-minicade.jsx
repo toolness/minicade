@@ -21,9 +21,11 @@
           <div className="col-sm-8">
             <h6><a href={game.url} target="_blank">{game.title}</a></h6>
             <p><small>{game.description}</small></p>
-            <ul className="list-inline">
-              <li><button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleEdit}>Edit</button></li>
-              <li><button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemove}>Remove</button></li>
+          </div>
+          <div className="col-sm-4 text-right">
+            <ul className="list-inline" style={{marginTop: 10, marginBottom: 10}}>
+              <li><a href="#" onClick={this.handleEdit}><span className="glyphicon glyphicon-pencil"></span><span className="sr-only">Edit</span></a></li>
+              <li><a href="#" onClick={this.handleRemove}><span className="glyphicon glyphicon-trash"></span><span className="sr-only">Remove</span></a></li>
             </ul>
           </div>
         </div>
@@ -166,7 +168,7 @@
             <br/>
             {this.state.newGame
              ? null
-             : <button className="btn btn-awsm" onClick={this.handleAddGame}>Add Game</button>}
+             : <button className="btn btn-awsm" onClick={this.handleAddGame}><span className="glyphicon glyphicon-plus"></span> Add Game</button>}
           </div>
         </section>
       );

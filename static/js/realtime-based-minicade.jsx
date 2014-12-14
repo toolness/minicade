@@ -109,7 +109,22 @@
     },
     handleOkay: function() {
       window.open(this.props.embellishedGame.remixurl);
+      this.setState({step: 2});
+    },
+    handleSubmit: function(e) {
+      var game = this.props.game;
+      e.preventDefault();
+      this.props.onSubmit({
+        id: game.id,
+        url: this.refs.url.getDOMNode().value,
+        remixurl: game.remixurl && this.refs.remixurl.getDOMNode().value
+      });
       this.$modal().modal('hide');
+    },
+    getInitialState: function() {
+      return {
+        step: 1
+      };
     },
     componentDidMount: function() {
       this.$modal().modal()
@@ -123,6 +138,43 @@
       var game = this.props.game;
       var remixtool = this.props.embellishedGame.remixtool ||
                       'a different website';
+      var content;
+
+      if (this.state.step == 1) {
+        content = (
+          <div>
+            <div className="modal-body">
+              <p>You are about to start remixing <strong>{game.title}</strong> in {remixtool}.</p>
+              <p>When you're done remixing, please take note of the URL of your remix. If it's different from <code>{game.url}</code>, you will need to edit your Minicade to point to your remix.</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-awsm" data-dismiss="modal">Nevermind</button>
+              <button className="btn btn-awsm" onClick={this.handleOkay}>Okay</button>
+            </div>
+          </div>
+        );
+      } else {
+        content = (
+          <form onSubmit={this.handleSubmit} className="form">
+            <div className="modal-body">
+              <p>Done remixing? Please update the information below if your game's URL changed.</p>
+              <div className="form-group">
+                <label>URL (required)</label>
+                <input ref="url" className="form-control input-sm" type="url" required defaultValue={game.url} placeholder="http://"/>
+              </div>
+              {game.remixurl
+              ? <div className="form-group">
+                  <label>Remix URL</label>
+                  <input ref="remixurl" className="form-control input-sm" type="url" defaultValue={game.remixurl} placeholder="http://"/>
+                </div>
+              : null}
+            </div>
+            <div className="modal-footer">
+              <button type="submit" className="btn btn-awsm">Done</button>
+            </div>
+          </form>
+        );
+      }
 
       return (
         <div ref="modal" className="modal fade">
@@ -132,16 +184,7 @@
                 <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 className="modal-title">Remix {game.title}</h4>
               </div>
-              <div>
-              <div className="modal-body">
-                <p>You are about to start remixing <strong>{game.title}</strong> in {remixtool}.</p>
-                <p>When you're done remixing, please take note of the URL of your remix. If it's different from <code>{game.url}</code>, you will need to edit your Minicade to point to your remix.</p>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-awsm" data-dismiss="modal">Nevermind</button>
-                <button className="btn btn-awsm" onClick={this.handleOkay}>Okay</button>
-              </div>
-              </div>
+              {content}
             </div>
           </div>
         </div>
@@ -183,7 +226,7 @@
     },
     handleRemixGame: function(game, embellishedGame) {
       this.setState({
-        modal: <RemixModal game={game} embellishedGame={embellishedGame} onClose={this.handleCloseModal}/>
+        modal: <RemixModal game={game} embellishedGame={embellishedGame} onClose={this.handleCloseModal} onSubmit={this.handleEditGameSubmit}/>
       });
     },
     handleEditGameSubmit: function(game) {

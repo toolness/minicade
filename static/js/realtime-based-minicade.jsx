@@ -2,10 +2,12 @@
   var RealtimeClient = require('./lib/realtime/client');
 
   var GameRow = React.createClass({
-    handleEdit: function() {
+    handleEdit: function(e) {
+      e.preventDefault();
       this.props.onEdit(this.props.game);
     },
-    handleRemove: function() {
+    handleRemove: function(e) {
+      e.preventDefault();
       if (window.confirm(
         "Are you sure you want to remove the game '" +
         this.props.game.title + "' from your minicade? This cannot be undone."

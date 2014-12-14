@@ -32,15 +32,15 @@
             <p><small>{game.description}</small></p>
           </div>
           <div className="col-sm-4 text-right">
-            {game.remixurl
-             ? <h6>
-                 <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemix}>Remix Game</button>
-               </h6>
-             : null}
             <ul className="list-inline" style={{marginTop: 10, marginBottom: 10}}>
               <li><a href="#" onClick={this.handleEdit}><span className="glyphicon glyphicon-pencil"></span><span className="sr-only">Edit</span></a></li>
               <li><a href="#" onClick={this.handleRemove}><span className="glyphicon glyphicon-trash"></span><span className="sr-only">Remove</span></a></li>
               <li><a href="#" onClick={this.handleClone}><span className="glyphicon glyphicon-retweet"></span><span className="sr-only">Clone</span></a></li>
+              {game.remixurl
+               ? <li>
+                   <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemix}>Remix Game</button>
+                 </li>
+               : null}
             </ul>
           </div>
         </div>

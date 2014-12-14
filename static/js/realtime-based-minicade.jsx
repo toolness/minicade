@@ -179,6 +179,14 @@
             <h2 className="subheading">
               <span className="tag-name">{bin}</span>
             </h2>
+            {games.length
+             ? <div>
+                 <p>This is an arcade of {games.length} {games.length == 1 ? "minigame" : "minigames"}.</p>
+                 <a href="#play" className="btn btn-awsm">Play Minicade</a>
+                 <br/>
+                 <br/>
+               </div>
+             : null}
             <div className="row joystick">
               <img src="/images/joystick.png"/>
             </div>
@@ -186,7 +194,7 @@
             <br/>
             {this.state.newGame
              ? null
-             : <button className="btn btn-awsm" onClick={this.handleAddGame}><span className="glyphicon glyphicon-plus"></span> Add Game</button>}
+             : <button className="btn btn-awsm btn-sm" onClick={this.handleAddGame}><span className="glyphicon glyphicon-plus"></span> Add Game</button>}
           </div>
         </section>
       );
@@ -203,6 +211,9 @@
       );
       // For use in debug console only!
       window.app = app;
+      window.MAKES = backend.games.map(function(game) {
+        return {title: game.title, contenturl: game.url};
+      });
     }
 
     var backend = RealtimeClient(function sendMessage(data) {

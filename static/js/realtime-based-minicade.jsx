@@ -21,8 +21,10 @@
           <div className="col-sm-8">
             <h6><a href={game.url} target="_blank">{game.title}</a></h6>
             <p><small>{game.description}</small></p>
-            <button onClick={this.handleEdit}>Edit</button>
-            <button onClick={this.handleRemove}>Remove</button>
+            <ul className="list-inline">
+              <li><button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleEdit}>Edit</button></li>
+              <li><button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemove}>Remove</button></li>
+            </ul>
           </div>
         </div>
       );
@@ -51,13 +53,26 @@
 
       return (
         <div className="row">
-          <div className="col-sm-8">
-            <form onSubmit={this.handleSubmit}>
-              <input ref="title" type="text" required defaultValue={game.title} placeholder="title"/>
-              <input ref="description" type="text" defaultValue={game.description} placeholder="description"/>
-              <input ref="url" type="url" required defaultValue={game.url} placeholder="http://"/>
-              <button type="submit">Save</button>
-              <button onClick={this.handleCancel}>Cancel</button>
+          <div className="col-sm-12">
+            <br/>
+            <p>Enter information about the minigame below.</p>
+            <form className="form" role="form" onSubmit={this.handleSubmit}>
+              <div className="form-group">
+                <label>Title (required)</label>
+                <input ref="title" className="form-control input-sm" type="text" required defaultValue={game.title}/>
+              </div>
+              <div className="form-group">
+                <label>Description</label>
+                <input ref="description" className="form-control input-sm" type="text" defaultValue={game.description}/>
+              </div>
+              <div className="form-group">
+                <label>URL (required)</label>
+                <input ref="url" className="form-control input-sm" type="url" required defaultValue={game.url} placeholder="http://"/>
+              </div>
+              <ul className="list-inline">
+                <li><button className="btn btn-awsm btn-xs" type="submit">Save</button></li>
+                <li><button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleCancel}>Cancel</button></li>
+              </ul>
             </form>
           </div>
         </div>

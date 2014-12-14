@@ -1,5 +1,6 @@
 (function() {
   var RealtimeClient = require('./lib/realtime/client');
+  var timeago = require('timeago');
 
   var GameRow = React.createClass({
     handleEdit: function(e) {
@@ -209,6 +210,26 @@
   });
 
   var ConnectionStatus = React.createClass({
+    getInitialState: function() {
+      return {
+        disconnectedTimeago: null
+      };
+    },
+    componentWillReceiveProps: function(nextProps) {
+      if (this.props.connected && !nextProps.connected) {
+        this.disconnectedAt = Date.now();
+        this.interval = window.setInterval(this.updateTimeago, 10000);
+        this.updateTimeago();
+      } else if (!this.props.connected && nextProps.connected) {
+        window.clearInterval(this.interval);
+      }
+    },
+    updateTimeago: function() {
+      this.setState({disconnectedTimeago: timeago(this.disconnectedAt)});
+    },
+    componentWillUnmount: function() {
+      window.clearInterval(this.interval);
+    },
     render: function() {
       return (
         <p style={{
@@ -218,7 +239,10 @@
           webkitTransition: 'opacity 0.5s'
         }}><small>
           <span className="glyphicon glyphicon-flash"></span>
-          Connecting to server&hellip;
+          {this.state.disconnectedTimeago
+           ? "Disconnected from server " + this.state.disconnectedTimeago +
+             ". Reconnecting\u2026"
+           : "Connecting to server\u2026"}
         </small></p>
       );
     }

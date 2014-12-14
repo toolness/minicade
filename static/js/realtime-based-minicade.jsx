@@ -148,10 +148,11 @@
               <img src="/images/joystick.png"/>
             </div>
             {rows}
+            <br/>
+            {this.state.newGame
+             ? null
+             : <button className="btn btn-awsm" onClick={this.handleAddGame}>Add Game</button>}
           </div>
-          {this.state.newGame
-           ? null
-           : <button className="btn btn-awsm" onClick={this.handleAddGame}>Add Game</button>}
         </section>
       );
     }

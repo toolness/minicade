@@ -1,6 +1,7 @@
 (function() {
   var RealtimeClient = require('./lib/realtime/client');
   var timeago = require('timeago');
+  var urlParse = require('url').parse;
 
   var GameRow = React.createClass({
     handleEdit: function(e) {
@@ -116,7 +117,12 @@
         var field = match[1];
         var url = match[2];
         if (!this.refs[field]) return;
+        var fieldChanges = {};
         this.refs[field].getDOMNode().value = url;
+        fieldChanges[field] = {$set: {time: Date.now(), origin: e.origin}};
+        this.setState(React.addons.update(this.state, {
+          remoteFieldChanges: fieldChanges
+        }));
       }
     },
     handleModalHidden: function() {
@@ -138,7 +144,8 @@
     },
     getInitialState: function() {
       return {
-        step: 1
+        step: 1,
+        remoteFieldChanges: {}
       };
     },
     componentDidMount: function() {
@@ -151,10 +158,17 @@
       this.$modal().data('bs.modal', null)
         .off('hidden.bs.modal', this.handleModalHidden);
     },
+    getFieldChangedNotice: function(name) {
+      var info = this.state.remoteFieldChanges[name];
+      if (!info) return null;
+      return (
+        <p><small>This field was updated <Timeago time={info.time}/> by {urlParse(info.origin).host}.</small></p>
+      );
+    },
     render: function() {
       var game = this.props.game;
       var remixtool = this.props.embellishedGame.remixtool ||
-                      'a different website';
+                      urlParse(this.props.embellishedGame.remixurl).host;
       var content;
 
       if (this.state.step == 1) {
@@ -178,11 +192,13 @@
               <div className="form-group">
                 <label>URL (required)</label>
                 <input ref="url" className="form-control input-sm" type="url" required defaultValue={game.url} placeholder="http://"/>
+                {this.getFieldChangedNotice('url')}
               </div>
               {game.remixurl
               ? <div className="form-group">
                   <label>Remix URL</label>
                   <input ref="remixurl" className="form-control input-sm" type="url" defaultValue={game.remixurl} placeholder="http://"/>
+                  {this.getFieldChangedNotice('remixurl')}
                 </div>
               : null}
             </div>

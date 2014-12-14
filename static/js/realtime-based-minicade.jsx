@@ -203,23 +203,22 @@
 
   $(function() {
     var bin = $('meta[name=bin]').attr('content');
-
-    function renderApp() {
+    var backend = RealtimeClient(function sendMessage(data) {
+      // TODO: What if we're not connected to the server yet?
+      ws.send(JSON.stringify(data));
+    }, function onChange() {
       var app = React.render(
         <RealtimeMinicade bin={bin} backend={backend} games={backend.games}/>,
         $('#page')[0]
       );
       // For use in debug console only!
       window.app = app;
+
+      // For use by minicade.js.
       window.MAKES = backend.games.map(function(game) {
         return {title: game.title, contenturl: game.url};
       });
-    }
-
-    var backend = RealtimeClient(function sendMessage(data) {
-      // TODO: What if we're not connected to the server yet?
-      ws.send(JSON.stringify(data));
-    }, renderApp);
+    });
 
     var ws = new WebSocket('ws://' + location.host + '/f/' + bin);
     ws.addEventListener('close', function() {

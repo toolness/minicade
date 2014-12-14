@@ -19,10 +19,6 @@
       e.preventDefault();
       this.props.onClone(this.props.game);
     },
-    handleRemix: function(e) {
-      var embellishedGame = RealtimeClient.embellish(this.props.game);
-      window.open(embellishedGame.remixurl);
-    },
     render: function() {
       var game = this.props.game;
       var embellishedGame = RealtimeClient.embellish(this.props.game);
@@ -40,7 +36,7 @@
               <li><a href="#" onClick={this.handleClone}><span className="glyphicon glyphicon-retweet"></span><span className="sr-only">Clone</span></a></li>
               {embellishedGame.remixurl
                ? <li>
-                   <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.handleRemix}>{embellishedGame.remixaction}</button>
+                   <button className="btn btn-awsm btn-awsmblue btn-xs" onClick={this.props.onRemix.bind(null, game, embellishedGame)}>{embellishedGame.remixaction}</button>
                  </li>
                : null}
             </ul>
@@ -104,9 +100,59 @@
     }
   });
 
+  var RemixModal = React.createClass({
+    $modal: function() {
+      return $(this.refs.modal.getDOMNode());
+    },
+    handleModalHidden: function() {
+      this.props.onClose();
+    },
+    handleOkay: function() {
+      window.open(this.props.embellishedGame.remixurl);
+      this.$modal().modal('hide');
+    },
+    componentDidMount: function() {
+      this.$modal().modal()
+        .on('hidden.bs.modal', this.handleModalHidden);
+    },
+    componentWillUnmount: function() {
+      this.$modal().data('bs.modal', null)
+        .off('hidden.bs.modal', this.handleModalHidden);
+    },
+    render: function() {
+      var game = this.props.game;
+      var remixtool = this.props.embellishedGame.remixtool ||
+                      'a different website';
+
+      return (
+        <div ref="modal" className="modal fade">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 className="modal-title">Remix {game.title}</h4>
+              </div>
+              <div>
+              <div className="modal-body">
+                <p>You are about to start remixing <strong>{game.title}</strong> in {remixtool}.</p>
+                <p>When you're done remixing, please take note of the URL of your remix. If it's different from <code>{game.url}</code>, you will need to edit your Minicade to point to your remix.</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-awsm" data-dismiss="modal">Nevermind</button>
+                <button className="btn btn-awsm" onClick={this.handleOkay}>Okay</button>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  });
+
   var RealtimeMinicade = React.createClass({
     getInitialState: function() {
       return {
+        modal: null,
         editingGame: null,
         newGame: null
       };
@@ -130,6 +176,14 @@
           url: game.url,
           remixurl: game.remixurl
         }
+      });
+    },
+    handleCloseModal: function() {
+      this.setState({modal: null});
+    },
+    handleRemixGame: function(game, embellishedGame) {
+      this.setState({
+        modal: <RemixModal game={game} embellishedGame={embellishedGame} onClose={this.handleCloseModal}/>
       });
     },
     handleEditGameSubmit: function(game) {
@@ -170,7 +224,7 @@
               return (
                 this.state.editingGame == game.id
                 ? <AddOrEditGameRow key={game.id} game={game} onSubmit={this.handleEditGameSubmit} onCancel={this.handleEditGameCancel}/>
-                : <GameRow key={game.id} game={game} onEdit={this.handleEditGame} onRemove={this.handleRemoveGame} onClone={this.handleCloneGame}/>
+                : <GameRow key={game.id} game={game} onEdit={this.handleEditGame} onRemove={this.handleRemoveGame} onClone={this.handleCloneGame} onRemix={this.handleRemixGame}/>
               );
             }, this)}
             {this.state.newGame
@@ -193,6 +247,7 @@
       return (
         <section>
           <div className="container">
+            {this.state.modal}
             <h2 className="subheading">
               <span className="tag-name">{bin}</span>
             </h2>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Minigame Example</title>
+<div id="content">
+  <p>This "game" is just used for manual testing.</p>
+  <p>My URL is: <code id="url"></code></p>
+  <button onclick="Tinygame.win()">Win Game</button>
+  <button onclick="Tinygame.lose()">Lose Game</button>
+</div>
+<script src="/tinygame.js"></script>
+<script>
+onload = function() {
+  var url = document.getElementById('url');
+  url.textContent = window.location.href;
+};
+</script>

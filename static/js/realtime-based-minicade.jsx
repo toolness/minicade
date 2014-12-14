@@ -106,11 +106,23 @@
     $modal: function() {
       return $(this.refs.modal.getDOMNode());
     },
+    handlePostMessage: function(e) {
+      if (e.source && e.source === this.remixWindow) {
+        var match = e.data.match(
+          /^minicade:(url|remixurl):(https?:\/\/.+)$/
+        );
+        if (!match) return;
+        var field = match[1];
+        var url = match[2];
+        if (!this.refs[field]) return;
+        this.refs[field].getDOMNode().value = url;
+      }
+    },
     handleModalHidden: function() {
       this.props.onClose();
     },
     handleOkay: function() {
-      window.open(this.props.embellishedGame.remixurl);
+      this.remixWindow = window.open(this.props.embellishedGame.remixurl);
       this.setState({step: 2});
     },
     handleSubmit: function(e) {
@@ -129,10 +141,12 @@
       };
     },
     componentDidMount: function() {
+      window.addEventListener("message", this.handlePostMessage, false);
       this.$modal().modal()
         .on('hidden.bs.modal', this.handleModalHidden);
     },
     componentWillUnmount: function() {
+      window.removeEventListener("message", this.handlePostMessage, false);
       this.$modal().data('bs.modal', null)
         .off('hidden.bs.modal', this.handleModalHidden);
     },

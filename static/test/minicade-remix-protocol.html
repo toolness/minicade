@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.css">
+<title>Minicade Remix Protocol (MRP) Test Page</title>
+<div class="container">
+  <h1>Minicade Remix Protocol (MRP) Test Page</h1>
+  <div id="app"></div>
+</div>
+<script src="/vendor/react/build/react-with-addons.js"></script>
+<script src="/vendor/react/build/JSXTransformer.js"></script>
+<script type="text/jsx">
+function absoluteUrl(url) {
+  var a = document.createElement('a');
+  a.setAttribute('href', url);
+  return a.href;
+}
+
+var App = React.createClass({
+  handleSubmit: function(e) {
+    var url = this.refs.url.getDOMNode().value;
+    var remixurl = this.refs.remixurl.getDOMNode().value;
+
+    e.preventDefault();
+    if (!window.opener) return;
+    window.opener.postMessage("minicade:url:" + url, "*");
+    if (remixurl)
+      window.opener.postMessage("minicade:remixurl:" + remixurl, "*");
+    window.alert("Information sent to window opener!");
+  },
+  render: function() {
+    return (
+      <form className="form" onSubmit={this.handleSubmit}>
+        <div className="form-group">
+          <label>URL</label>
+          <input ref="url" type="url" defaultValue={this.props.initialUrl} required className="form-control" placeholder="http://"/>
+        </div>
+        <div className="form-group">
+          <label>Remix URL</label>
+          <input ref="remixurl" type="url" defaultValue={this.props.initialRemixurl} className="form-control" placeholder="http://"/>
+        </div>
+        <button type="submit" className="btn btn-primary">Send To Window Opener</button>
+      </form>
+    );
+  }
+});
+
+var app = React.render(
+  <App initialUrl={absoluteUrl('minigame.html')} initialRemixurl={window.location.href} />,
+  document.getElementById('app')
+);
+</script>

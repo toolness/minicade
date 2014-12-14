@@ -337,6 +337,7 @@
 
   $(function() {
     var bin = $('meta[name=bin]').attr('content');
+    var sendQueue = [];
     var onChange = function() {
       var connected = (ws.readyState == WebSocket.OPEN);
       var app = React.render(
@@ -355,13 +356,21 @@
       });
     };
     var backend = RealtimeClient(function sendMessage(data) {
-      // TODO: What if we're not connected to the server yet?
-      ws.send(JSON.stringify(data));
+      data = JSON.stringify(data);
+      if (ws.readyState == WebSocket.OPEN) {
+        ws.send(data);
+      } else {
+        sendQueue.push(data);
+      }
     }, onChange);
 
-    var ws = new WebSocket('ws://' + location.host + '/f/' + bin);
-    ws.addEventListener('open', onChange);
+    var ws = new ReconnectingWebSocket('ws://' + location.host + '/f/' + bin);
+    ws.addEventListener('open', function() {
+      sendQueue.splice(0).forEach(ws.send.bind(ws));
+      onChange();
+    });
     ws.addEventListener('close', onChange);
+    ws.addEventListener('error', onChange);
     ws.addEventListener('message', function(event) {
       backend.receiveMessage(JSON.parse(event.data));
     });

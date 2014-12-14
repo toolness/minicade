@@ -194,6 +194,22 @@
     }
   });
 
+  var ConnectionStatus = React.createClass({
+    render: function() {
+      return (
+        <p style={{
+          color: 'lightgray',
+          opacity: this.props.connected ? 0 : 1,
+          transition: 'opacity 0.5s',
+          webkitTransition: 'opacity 0.5s'
+        }}><small>
+          <span className="glyphicon glyphicon-flash"></span>
+          Connecting to server&hellip;
+        </small></p>
+      );
+    }
+  });
+
   var RealtimeMinicade = React.createClass({
     getInitialState: function() {
       return {
@@ -295,11 +311,6 @@
             {this.state.modal}
             <h2 className="subheading">
               <span className="tag-name">{bin}</span>
-              {this.props.connected
-               ? null
-               : <div style={{float: 'right', color: 'red'}}>
-                  <span className="glyphicon glyphicon-flash" title="Connection to server lost."></span>
-                 </div>}
             </h2>
             {games.length
              ? <div>
@@ -317,6 +328,7 @@
             {this.state.newGame
              ? null
              : <button className="btn btn-awsm btn-sm" onClick={this.handleAddGame}><span className="glyphicon glyphicon-plus"></span> Add Game</button>}
+            <ConnectionStatus connected={this.props.connected}/>
           </div>
         </section>
       );

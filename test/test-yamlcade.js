@@ -52,6 +52,14 @@ describe('yamlcade', function() {
       .should.be.false;
   });
 
+  it('should handle games.minica.de games specially', function() {
+    var minicade = yamlcade.parse('- url: http://games.minica.de/emzwelvf');
+    minicade.games[0].remixurl.should.eql(
+      'http://mmm.minica.de/?importGame=http%3A%2F%2Fgames.minica.de%2Femzwelvf'
+    );
+    minicade.games[0].remixaction.should.eql('Remix in MMM');
+  });
+
   it('should handle *.makes.org games specially', function() {
     var minicade = yamlcade.parse('- url: https://a.makes.org/foo');
     minicade.games[0].contenturl.should.eql('https://a.makes.org/foo_');

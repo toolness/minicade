@@ -54,6 +54,7 @@ describe('realtime', function() {
   beforeEach(function() {
     storage = storages.MemStorage();
     realtime.setStorage(storage);
+    realtime.setStarterMinicade([]);
   });
 
   it('should close binStream when no more clients exist', function(done) {

@@ -390,10 +390,18 @@
             </h2>
             {games.length
              ? <div>
-                 <p>This is an arcade of {games.length} {games.length == 1 ? "minigame" : "minigames"}.</p>
+                 {isNew
+                  ? <div>
+                      <p>Welcome to your new Minicade!</p>
+                      <p>We've added a sample game to get you started.</p>
+                    </div>
+                  : <p>This is an arcade of {games.length} {games.length == 1 ? "minigame" : "minigames"}.</p>}
                  <a href="#play" className="btn btn-awsm">Play Minicade</a>
                  <br/>
                  <br/>
+                 {isNew
+                  ? <p><small>(Don't like the name <span class="tag-name">{bin}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
+                  : <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>}
                </div>
              : null}
             <div className="row joystick">

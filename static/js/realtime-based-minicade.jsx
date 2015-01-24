@@ -1,6 +1,8 @@
 (function() {
   var RealtimeClient = require('./lib/realtime/client');
+  var starterMinicade = require('./lib/realtime/starter-minicade.json');
   var timeago = require('timeago');
+  var _ = require('underscore');
   var urlParse = require('url').parse;
 
   var GameRow = React.createClass({
@@ -349,6 +351,7 @@
       var bin = this.props.bin;
       var games = this.props.games;
       var rows;
+      var isNew = _.isEqual(starterMinicade, this.props.games);
 
       if (games.length || this.state.newGame) {
         rows = (
@@ -382,6 +385,7 @@
           <div className="container">
             {this.state.modal}
             <h2 className="subheading">
+              {isNew ? "New " : ""}
               <span className="tag-name">{bin}</span>
             </h2>
             {games.length

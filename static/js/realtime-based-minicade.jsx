@@ -400,7 +400,7 @@
                  <br/>
                  <br/>
                  {isNew
-                  ? <p><small>(Don't like the name <span class="tag-name">{bin}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
+                  ? <p><small>(Don't like the name <span className="tag-name">{bin}</span>? You can change it by hacking the URL in your browser's address bar.)</small></p>
                   : <p><small>Want to start your own minicade? <a href="/">It's easy</a>!</small></p>}
                </div>
              : null}

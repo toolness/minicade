@@ -392,11 +392,11 @@
              ? <div>
                  {isNew
                   ? <div>
-                      <p>Welcome to your new Minicade!</p>
+                      <p>Welcome to your new playlist!</p>
                       <p>We've added a sample game to get you started.</p>
                     </div>
                   : <p>This is an arcade of {games.length} {games.length == 1 ? "minigame" : "minigames"}.</p>}
-                 <a href="#play" className="btn btn-awsm">Play Minicade</a>
+                 <a href="#play" className="btn btn-awsm">Play</a>
                  <br/>
                  <br/>
                  {isNew

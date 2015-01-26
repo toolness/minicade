@@ -57,7 +57,15 @@ describe('yamlcade', function() {
     minicade.games[0].remixurl.should.eql(
       'http://mmm.minica.de/?importGame=http%3A%2F%2Fgames.minica.de%2Femzwelvf'
     );
-    minicade.games[0].remixaction.should.eql('Remix in MMM');
+    minicade.games[0].remixaction.should.eql('Remix in Minicade');
+  });
+
+  it('should handle mmm.minica.de games specially', function() {
+    var minicade = yamlcade.parse('- url: http://mmm.minica.de/emzwelvf');
+    minicade.games[0].remixurl.should.eql(
+      'http://mmm.minica.de/?importGame=http%3A%2F%2Fmmm.minica.de%2Femzwelvf'
+    );
+    minicade.games[0].remixaction.should.eql('Remix in Minicade');
   });
 
   it('should handle *.makes.org games specially', function() {

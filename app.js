@@ -14,7 +14,6 @@ var realtime = require('./lib/realtime');
 
 var PORT = process.env.PORT || 3000;
 var DEBUG = 'DEBUG' in process.env;
-var NEW_BINS_ARE_REALTIME = 'NEW_BINS_ARE_REALTIME' in process.env;
 var MONGODB_URL = process.env.MONGODB_URL;
 var STATIC_DIR = __dirname + '/static';
 
@@ -97,16 +96,9 @@ app.get('/docs', function(req, res) {
 });
 
 app.get('/new-bin', function(req, res, next) {
-  if (NEW_BINS_ARE_REALTIME) {
-    return realtime.findUnique(randomTagGenerator, function(err, bin) {
-      if (err) return next(err);
-      res.redirect('/f/' + bin);
-    });
-  }
-
-  yamlbin.findUnique(randomTagGenerator, function(err, bin) {
+  return realtime.findUnique(randomTagGenerator, function(err, bin) {
     if (err) return next(err);
-    res.redirect('/b/' + bin);
+    res.redirect('/f/' + bin);
   });
 });
 

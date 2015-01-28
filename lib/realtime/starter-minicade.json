@@ -1,9 +1,30 @@
 [
   {
-    "id": "blank",
-    "title": "Your First Minigame",
-    "description": "This is your first minigame. Try remixing it!",
-    "url": "http://mmm.minica.de/examples/simple.html",
+    "id": "swat-flies",
+    "title": "Swat The Flies On The Wall",
+    "description": "Swat those annoying flies.",
+    "url": "http://mmm.minica.de/examples/swat-flies.html",
+    "remixurl": ""
+  },
+  {
+    "id": "marshmallow",
+    "title": "Don't Eat The Marshmallow",
+    "description": "Just don't.",
+    "url": "http://mmm.minica.de/examples/marshmallow.html",
+    "remixurl": ""
+  },
+  {
+    "id": "poop",
+    "title": "Don't Step On Poop!",
+    "description": "Ew... Watch your step.",
+    "url": "http://mmm.minica.de/examples/poop.html",
+    "remixurl": ""
+  },
+  {
+    "id": "steal-the-sushi",
+    "title": "Steal The Last Piece of Sushi",
+    "description": "But gracefully...",
+    "url": "http://mmm.minica.de/examples/steal-the-sushi.html",
     "remixurl": ""
   }
 ]

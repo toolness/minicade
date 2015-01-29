@@ -28,3 +28,8 @@
   authors: varelidi
   devnotes: About a dozen Blockly blocks.
   url: http://mmm.minica.de/examples/marshmallow.html
+
+- title: Catch The Yellow Monster
+  authors: toolness
+  devnotes: About 30 lines of Blockly.
+  url: http://mmm.minica.de/examples/catch-the-monster.html

@@ -26,5 +26,12 @@
     "description": "But gracefully...",
     "url": "http://mmm.minica.de/examples/steal-the-sushi.html",
     "remixurl": ""
+  },
+  {
+    "id": "poundsplat",
+    "title": "Poundsplat",
+    "description": "Avoid the stompy things.",
+    "url": "http://jsbin.com/xoseju/1",
+    "remixurl": ""
   }
 ]

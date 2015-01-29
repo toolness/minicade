@@ -1,5 +1,12 @@
 [
   {
+    "id": "catch-the-monster",
+    "title": "Catch The Yellow Monster",
+    "description": "Don't catch 'em all! Only the yellow one, please.",
+    "url": "http://mmm.minica.de/examples/catch-the-monster.html",
+    "remixurl": ""
+  },
+  {
     "id": "swat-flies",
     "title": "Swat The Flies On The Wall",
     "description": "Swat those annoying flies.",

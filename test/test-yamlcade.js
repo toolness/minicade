@@ -78,6 +78,7 @@ describe('yamlcade', function() {
   it('should handle jsbin.com games specially', function() {
     var minicade = yamlcade.parse('- url: http://jsbin.com/foo');
     minicade.games[0].remixurl.should.eql('http://jsbin.com/foo/edit');
+    minicade.games[0].contenturl.should.eql('http://jsbin-proxy.herokuapp.com/foo');
 
     minicade = yamlcade.parse('- url: http://jsbin.com/foo/');
     minicade.games[0].remixurl.should.eql('http://jsbin.com/foo/edit');

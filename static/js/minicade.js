@@ -79,6 +79,13 @@ $(function() {
 
   $(window).on('hashchange', function() {
     if (window.location.hash == '#play') {
+      if (MAKES.length == 0) {
+        // There are currently no makes in this minicade, retry in a bit
+        // to see if that has changed.
+        return window.setTimeout(function() {
+          $(window).trigger('hashchange');
+        }, 250);
+      }
       startPlaying();
     } else if ($('html').hasClass('playing')) {
       window.location.reload();

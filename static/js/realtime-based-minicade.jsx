@@ -1,6 +1,6 @@
 (function() {
-  var RealtimeClient = require('./lib/realtime/client');
-  var starterMinicade = require('./lib/realtime/starter-minicade.json');
+  var RealtimeClient = require('/lib/realtime/client');
+  var starterMinicade = require('/lib/realtime/starter-minicade.json');
   var timeago = require('timeago');
   var _ = require('underscore');
   var urlParse = require('url').parse;
